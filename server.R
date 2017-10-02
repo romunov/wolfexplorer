@@ -15,14 +15,18 @@ function(input, output, session) {
     outmap <- leafletProxy("map", data = filteredData()) %>%
       clearMarkers() %>% clearShapes() %>%
       addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1,
-                       color = "#777777", data = xy) %>%
-      addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1,
-                       color = "#2E86C1", fillOpacity = 0.7,
-                       popup = paste("Animal:", xy$animal, "on", xy$time, sep = " "))
+                       color = "#777777", data = xy)
     
+    # add lines of selected animals
     for (i in unique(filteredData()$animal)) {
       outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, data = filteredData()[filteredData()$animal == i, ])
     }
+    
+    # finally overlay points of selected animals
+    outmap %>% addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1,
+                                color = "#2E86C1", fillOpacity = 0.7,
+                                popup = paste("Animal:", filteredData()$animal, "on", filteredData()$time, sep = " "))
+    
     outmap
   })
 }
