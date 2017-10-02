@@ -13,7 +13,7 @@ function(input, output, session) {
   
   observe({
     outmap <- leafletProxy("map", data = filteredData()) %>%
-      clearMarkers() %>%
+      clearMarkers() %>% clearShapes() %>%
       addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1, color = "#777777", data = xy) %>%
       addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1, color = "#2E86C1", fillOpacity = 0.7)
     
