@@ -1,0 +1,6 @@
+Title: Explorer designed to visualize complex multi-year multi-specimen data. Case study of Slovenian wolves.
+version: 0.314
+Authors: Roman Luštrik & Žan Kuralt
+License: MIT
+DisplayMode: Normal
+Type: Shiny
