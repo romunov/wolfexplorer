@@ -1,5 +1,6 @@
 function(input, output, session) {
   
+  # Create map with no data, but do specify bounds
   output$map <- renderLeaflet({
     leaflet(xy) %>% 
       addProviderTiles(providers$Stamen.Terrain,
@@ -7,6 +8,7 @@ function(input, output, session) {
       fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat))
   })
   
+  # add grey markers
   observe({
     leafletProxy(mapId = "map", data = xy) %>%
       clearMarkers() %>% clearShapes() %>% 
@@ -20,49 +22,52 @@ function(input, output, session) {
     xy[(xy$animal %in% input$animals) & (xy$time > min(input$datumrange) & xy$time < max(input$datumrange)), ]
   })
   
-  
-  observe({
-    # Filter out siblings
+  fSibs <- reactive({
+    ## Filter out siblings from all data
     x <- filteredData()$animal
     sibs <- siblings[siblings$mother %in% x | siblings$father %in% x, "sibling"]
-    xy.sibs <- xy[(xy$animal %in% sibs) & (xy$time > min(input$datumrange) & xy$time < max(input$datumrange)), ] 
-    xy.sibs <- xy.sibs[xy.sibs$animal %in% input$sibling, ]
+    xy.sibs <- xy[(xy$animal %in% sibs) & (xy$time >= min(input$datumrange) & xy$time <= max(input$datumrange)), ] 
+    list(xy = xy.sibs, sibs = xy.sibs$animal)
+  })
+  
+  observe({
     
+    # prime map with filtered data for animals
     outmap <- leafletProxy(mapId = "map", data = filteredData()) 
     
-    # add lines of selected animals
+    # add lines and points of selected animals
     if (nrow(filteredData()) > 0) {
       for (i in unique(filteredData()$animal)) {
         outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat,
                                data = filteredData()[filteredData()$animal == i, ],
                                color = "red", opacity = 0.7, weight = 4)
       }
+      
+      # add points for animals
+      outmap <- outmap %>%
+        removeMarker(layerId = filteredData()$id) %>% # remove grey point before overplotting marker
+        addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[filteredData()$type])
     }
     
-    # Finally overlay points of selected animals
-    outmap <- outmap %>%
-      removeMarker(layerId = filteredData()$id) %>% 
-      addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[filteredData()$type])
+    # Add lines and points of potential siblings
     
-    # Checks if there are any siblings selected and then draws them
-    
-    if (nrow(xy.sibs) > 0) {
+    if (nrow(fSibs()$xy) > 0) {
       # Draws lines for siblings
-      for (i in unique(xy.sibs$animal)) {
+      for (i in unique(fSibs()$xy$animal)) {
         outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat,
-                               data = xy.sibs[xy.sibs$animal == i, ],
+                               data = fSibs()$xy[fSibs()$xy$animal == i, ],
                                color = "orange", opacity = 0.7, weight = 4)
       }
-      
+
       # Draws points for siblings
-      outmap <- outmap %>% 
-        removeMarker(layerId = xy.sibs$id[xy.sibs$animal %in% input$siblings]) %>% 
-        addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[xy.sibs$type], data = xy.sibs[xy.sibs %in% input$siblings, ])
+      outmap <- outmap %>%
+        removeMarker(layerId = fSibs()$xy$id) %>%
+        addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[fSibs()$xy$type], data = fSibs()$xy[fSibs()$xy$animal %in% input$siblings, ])
     }
     
     if (nrow(filteredData()) > 0) {
       output$siblings <- renderUI({
-        selectInput("siblings", "Siblings", multiple = TRUE, choices = sibs)
+        selectInput("siblings", "Siblings", multiple = TRUE, choices = fSibs()$sibs)
       })
     }
     
