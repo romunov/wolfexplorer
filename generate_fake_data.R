@@ -8,6 +8,7 @@ N <- 5 # number of points per individual
 lng <- c(13.0, 16.6)
 lat <- c(45.4, 46.88)
 date <- as.Date(c("01.01.2010", "31.12.2017"), format = "%d.%m.%Y")
+type <- c("scat", "urine", "saliva", "tissue")
 
 ind.pt <- data.frame(lat = runif(NIND, min = min(lat), max = max(lat)),
          lng = runif(NIND, min = min(lng), max = max(lng)))
@@ -18,7 +19,9 @@ xy <- sapply(ind.pt, FUN = function(x, N) {
   out <- data.frame(lng = rnorm(N, mean = x$lng, sd = 0.05),
              lat = rnorm(N, mean = x$lat, sd = 0.05))
   tm <- sample(seq(from = min(date), to = max(date), by = "day"), 1)
+  typ <- sample(type, 5, replace = TRUE)
   out$time <- tm + (1:N)
+  out$type <- typ
   out
 }, N = N, simplify = FALSE)
 
