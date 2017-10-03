@@ -10,9 +10,6 @@ function(input, output, session) {
       addProviderTiles(providers$Stamen.Terrain,
                        options = providerTileOptions(noWrap = TRUE, detectRetina = TRUE, reuseTiles = TRUE)) %>%
       fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat))
-      # addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1, fillColor = "black",
-      #                  opacity = 0.1, data = xy, layerId = xy$id,
-      #                  popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
   })
   
   observe({
@@ -35,6 +32,3 @@ function(input, output, session) {
       addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[filteredData()$type])
   })
 }
-
-
-
