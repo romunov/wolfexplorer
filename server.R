@@ -7,26 +7,34 @@ function(input, output, session) {
   
   output$map <- renderLeaflet({
     leaflet(xy) %>% 
-      addTiles() %>%
+      addProviderTiles(providers$Stamen.Terrain,
+                       options = providerTileOptions(noWrap = TRUE, detectRetina = TRUE, reuseTiles = TRUE)) %>%
       fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat))
+      # addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1, fillColor = "black",
+      #                  opacity = 0.1, data = xy, layerId = xy$id,
+      #                  popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
   })
   
   observe({
-    outmap <- leafletProxy("map", data = filteredData()) %>%
-      clearMarkers() %>% clearShapes() %>%
+    outmap <- leafletProxy(mapId = "map", data = filteredData()) %>%
+      clearMarkers() %>% clearShapes() %>% 
       addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1,
-                       color = "#777777", data = xy)
-    
-    # add lines of selected animals
-    for (i in unique(filteredData()$animal)) {
-      outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, data = filteredData()[filteredData()$animal == i, ])
-    }
+                       opacity = 0.1, data = xy, layerId = xy$id, fillColor = "black",
+                       popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
+      
+      # add lines of selected animals
+      for (i in unique(filteredData()$animal)) {
+        outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat,
+                               data = filteredData()[filteredData()$animal == i, ],
+                               color = "black", opacity = 0.5, weight = 2)
+      }
     
     # finally overlay points of selected animals
-    outmap %>% addCircleMarkers(lat = ~lat, lng = ~lng, radius = PS, weight = 1,
-                                color = "#2E86C1", fillOpacity = 0.7,
-                                popup = paste("Animal:", filteredData()$animal, "on", filteredData()$time, sep = " "))
-    
-    outmap
+    outmap %>%
+      removeMarker(layerId = filteredData()$id) %>% 
+      addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[filteredData()$type])
   })
 }
+
+
+

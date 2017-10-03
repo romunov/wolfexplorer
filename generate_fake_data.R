@@ -28,11 +28,4 @@ xy <- sapply(ind.pt, FUN = function(x, N) {
 xy <- do.call(rbind, xy)
 
 xy$animal <- sprintf("%.3d", rep(1:NIND, each = N))
-
-# xys <- sapply(split(xy, f = xy$anima), FUN = function(x) {
-#   l <- sapply(split(x, f = 1:nrow(x)), FUN = function(y) Line(y[, c("lng", "lat")]))
-#   lns <- Lines(l, ID = unique(x$animal))
-#   sl <- SpatialLines(list(lns))
-#   sldf
-#   })
-
+xy$id <- as.character(1:nrow(xy))
