@@ -12,3 +12,7 @@ icons <- iconList(
   urine = makeIcon(iconUrl = "icons/dot.png", iconWidth = 8, iconHeight = 8),
   saliva = makeIcon(iconUrl = "icons/dot.png", iconWidth = 8, iconHeight = 8)
 )
+
+bcols <- brewer.pal(n = 4, name = "Set1")
+pal <- colorFactor(palette = bcols, domain = c("tissue", "scat", "saliva", "urine"),
+                   ordered = TRUE)

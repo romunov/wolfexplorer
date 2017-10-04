@@ -29,30 +29,42 @@ function(input, output, session) {
   
   # Add markers and lines for selected animals to map
   observe({
-    print(fData())
     # Creates "baselayer"
     outmap <- leafletProxy("map") %>% 
       clearMarkers() %>%
       clearShapes() %>%
-      addCircleMarkers(data = xy, lat = ~lat, lng = ~lng, radius = 7, stroke = FALSE, fill = TRUE,
-                       fillOpacity = 0.3, fillColor = "black", layerId = paste("allMarkers", xy$id, sep = " "),
+      addCircleMarkers(data = xy, lat = ~lat, lng = ~lng, 
+                       radius = PS, 
+                       stroke = TRUE, 
+                       weight = 0.8,
+                       opacity = 0.5,
+                       color = "black",
+                       fill = TRUE,
+                       fillOpacity = 0.2, 
+                       fillColor = "black", 
+                       layerId = paste("allMarkers", xy$id, sep = " "),
                        popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
     
     if (nrow(fData()) > 0) {
       # Add lines
       for (i in unique(fData()$animal)) {
-        print(i)
         outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, 
                                layerId = paste("aniLines", fData()$id[fData()$animal == i], sep = " "),
                                data = fData()[fData()$animal == i, ],
-                               color = "red", opacity = 0.7, weight = 1)
+                               color = "black", 
+                               opacity = input$opacityrange, 
+                               weight = 1)
       }
       # Add markers
       outmap %>%
         removeMarker(layerId = paste("allMarkers", fData()$id, sep = " ")) %>% 
         addCircleMarkers(data = fData(),
-                         lat = ~lat, lng = ~lng, radius = PS, stroke = FALSE,
-                         fillOpacity = 0.7, fillColor = "red", layerId = paste("aniMarkers", fData()$id, sep = " "),
+                         lat = ~lat, lng = ~lng, 
+                         radius = PS, 
+                         stroke = FALSE,
+                         fillColor = ~pal(type),
+                         fillOpacity = input$opacityrange, 
+                         layerId = paste("aniMarkers", fData()$id, sep = " "),
                          popup = paste(fData()$type, "from", fData()$animal, "on", fData()$time, sep = " "))
     }
   })
@@ -93,13 +105,19 @@ function(input, output, session) {
         out.sibs <- addPolylines(map = out.sibs, lng = ~lng, lat = ~lat, 
                                  layerId = paste("sibLines", sibs$id[sibs$animal == i], sep = " "),
                                  data = sibs[sibs$animal == i, ],
-                                 color = "orange", opacity = 0.7, weight = 4, group = "sibLines")
+                                 color = "#fdc086", opacity = input$opacityrange, weight = 1, group = "sibLines")
       }
       # Add points
       out.sibs %>%
-        addMarkers(lat = ~lat, lng = ~lng, icon = ~icons[sibs$type], 
+        removeMarker(layerId = paste("allMarkers", sibs$id, sep = " ")) %>% 
+        addCircleMarkers(lat = ~lat, lng = ~lng, 
+                   data = sibs, 
+                   radius = PS,
+                   stroke = FALSE,
+                   fillColor = ~pal(type),
+                   fillOpacity = input$opacityrange,
                    layerId = paste("sibMarkers", sibs$id, sep = " "),
-                   data = sibs, group = "sibMarkers")
+                   group = "sibMarkers")
     }
   })
 }
