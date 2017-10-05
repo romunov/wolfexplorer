@@ -4,9 +4,10 @@ library(leaflet)
 library(RColorBrewer)
 library(rhandsontable)
 library(DT)
-source("generate_fake_data.R")
+# source("generate_fake_data.R")
 source("global.R")
 
+#### UI ####
 header <- dashboardHeader(title = "wolfexplorer",
                           # Set height of dashboardHeader
                           tags$li(class = "dropdown",
@@ -20,23 +21,15 @@ header <- dashboardHeader(title = "wolfexplorer",
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Explore data", tabName = "explore", icon = icon("search")),
-    menuItem("Data input", tabName = "upload", icon = icon("upload")),
-    menuItem("About wolfexplorer", tabName = "about", icon = icon("paw"))
+    menuItem("Data input", tabName = "upload", icon = icon("upload"), startExpanded = TRUE,
+             menuSubItem(text = "Submit data", tabName = "data_samples"),
+             menuSubItem(text = "Submit parentage data", tabName = "data_parentage"))
   )
 )
 
 body <- dashboardBody(
   tags$style(type = "text/css", "#map {height: calc(100vh - 55px) !important;}"),
   tabItems(
-    tabItem(tabName = "about",
-            h4("What is wolfexplorer?")),
-    tabItem(tabName = "upload",
-            fileInput(inputId = "submitFile", 
-                      label = "Upload dataset",
-                      buttonLabel = "Submit CSV file"),
-            # accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"),
-            uiOutput("overview")
-    ),
     tabItem(tabName = "explore",
             
             div(class="outer",
@@ -51,130 +44,264 @@ body <- dashboardBody(
                 absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                               draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                               width = 330, height = "auto",
-                              
-                              sliderInput("datumrange", "Datum range", min = min(xy$time), max = max(xy$time),
-                                          value = range(xy$time), step = 1),
+                              uiOutput("comment"),
+                              uiOutput("sliderDate"),
                               uiOutput("animals"),
-                              uiOutput("siblings"),
-                              sliderInput("opacityrange", "Line/Point opacity", min = 0, max = 1,
-                                          value = 0.8, step = 0.1, dragRange = FALSE)
+                              uiOutput("offspring"),
+                              uiOutput("opacity")
                 )
             )
+    ),
+    tabItem(tabName = "data_samples",
+            fluidRow(
+              box(solidHeader = TRUE, collapsible = TRUE, title = "Upload samples data",
+                  fileInput(inputId = "data_samples", 
+                            label = "Upload dataset",
+                            buttonLabel = "Select data",
+                            accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))),
+              h4("Upload parentage data for full functionality")),
+            br(),
+            br(),
+            uiOutput("view_samples")
+    ),
+    tabItem(tabName = "data_parentage",
+            box(solidHeader = TRUE, collapsible = TRUE, title = "Upload parentage / colony data",
+                fileInput(inputId = "data_parentage", 
+                          label = "Upload dataset",
+                          buttonLabel = "Select data",
+                          accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))),
+            br(),
+            br(),
+            uiOutput("view_parentage")
     )
   )
 )
 
-
 ui <- dashboardPage(header, sidebar, body, skin = "black")
+
+#### SERVER ####
 
 server <- function(input, output) {
   
-  # dataset <- observeEvent(input$submitFile, {
-  #   x <- input$file
-  #   if (is.null(x))
-  #     return(NULL)
-  #   else {
-  #     x <- read.csv(x$datapath, header = TRUE, sep = input$sep,
-  #                   encoding = "UTF-8", stringsAsFactors = FALSE)
-  #     x
-  #   }
-  # })
-  # 
-  # output$overview <- renderUI({
-  #   box(title = "Dataset overview", solidHeader = TRUE, width = 12, collapsible = TRUE,
-  #       DT::datatable(data = dataset(), filter = "top", fillContainer = TRUE)
-  #   )
-  # })
+  #### FILE INPUT ####  
   
-  # Create empty map with specified bounds
-  output$map <- renderLeaflet({
-    leaflet(data = xy) %>% 
-      addProviderTiles(provider = providers$Stamen.Terrain,
-                       options = providerTileOptions(noWrap = TRUE,
-                                                     detectRetina = TRUE,
-                                                     reuseTiles = TRUE)) %>% 
-      fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat))
-  })
-  
-  # Subset data based on input from slider
-  fData <- reactive({
-    xy[(xy$animal %in% input$animals) & (xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
-  })
-  
-  # # Subset animal in within date range
-  # fDateRange <- reactive({
-  #   xy[(xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
-  # })
-  
-  # Filter out siblings from data
-  fSibs <- reactive({
-    x <- fData()$animal
-    sibs <- siblings[siblings$mother %in% x | siblings$father %in% x, "sibling"]
-    xy[(xy$animal %in% sibs) & (xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
-  })
-  
-  # Add markers and lines for selected animals to map
-  observe({
-    # Creates "baselayer"
-    outmap <- leafletProxy("map") %>% 
-      clearMarkers() %>%
-      clearShapes() %>%
-      addCircleMarkers(data = xy, lat = ~lat, lng = ~lng, 
-                       radius = PS, 
-                       stroke = TRUE, 
-                       weight = 0.8,
-                       opacity = 0.5,
-                       color = "black",
-                       fill = TRUE,
-                       fillOpacity = 0.2, 
-                       fillColor = "black", 
-                       layerId = paste("allMarkers", xy$id, sep = " "),
-                       popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
-    
-    if (nrow(fData()) > 0) {
-      # Add lines
-      for (i in unique(fData()$animal)) {
-        outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, 
-                               layerId = paste("aniLines", fData()$id[fData()$animal == i], sep = " "),
-                               data = fData()[fData()$animal == i, ],
-                               color = "black", 
-                               opacity = input$opacityrange, 
-                               weight = 1)
-      }
-      # Add markers
-      outmap %>%
-        removeMarker(layerId = paste("allMarkers", fData()$id, sep = " ")) %>% 
-        addCircleMarkers(data = fData(),
-                         lat = ~lat, lng = ~lng, 
-                         radius = PS, 
-                         stroke = FALSE,
-                         fillColor = ~pal(type),
-                         fillOpacity = input$opacityrange, 
-                         layerId = paste("aniMarkers", fData()$id, sep = " "),
-                         popup = paste(fData()$type, "from", fData()$animal, "on", fData()$time, sep = " "))
+  inputFileSamples <- reactive({
+    x <- input$data_samples
+    if (is.null(x)) {
+      data.frame(lng = NA, lat = NA, time = NA, type = NA, animal = NA, id = NA)[0, ]
+    } else {
+      read.csv(x$datapath, header = TRUE, sep = ",",
+               encoding = "UTF-8", stringsAsFactors = FALSE, 
+               colClasses = c("numeric", "numeric", "Date", "character", "character"))
     }
   })
   
-  output$animals <- renderUI({
-    selectInput("animals", "Select Animal", multiple = TRUE, choices = unique(xy$animal))
+  inputFileParentage <- reactive({
+    x <- input$data_parentage
+    if (is.null(x)) {
+      data.frame(sibling = NA, mother = NA, father = NA)[0, ]
+    } else {
+      read.csv(x$datapath, header = TRUE, sep = ",",
+               encoding = "UTF-8", stringsAsFactors = FALSE,
+               colClasses = "character")
+    }
   })
   
+  #### VIEW UPLOADED DATA ####
   
-  # If there is some input in input$animal, display this menu
+  output$uploadSampleData <- renderDataTable({
+    x <- inputFileSamples()
+    DT::datatable(data = x, filter = "top", options = list(pageLength = 15))
+  })
+  
   observe({
-    if (nrow(fData()) == 0) {
-      output$siblings <- renderUI({ NULL })
+    x <- inputFileSamples()
+    if (nrow(x) == 0) {
+      output$view_samples <- renderUI({ NULL })
     } else {
-      output$siblings <- renderUI({
-        selectInput("siblings", "Siblings", multiple = TRUE, choices = fSibs()$animal)
+      output$view_samples <- renderUI({
+        dataTableOutput("uploadSampleData")
       })
     }
   })
   
-  # Add markers and lines for selected siblings to map
+  output$uploadParentageData <- renderDataTable({
+    x <- inputFileParentage()
+    DT::datatable(data = x, filter = "top", options = list(pageLength = 15))
+  })
+  
   observe({
-    sibs <- input$siblings
-    sibs <- fSibs()[fSibs()$animal %in% sibs, ]
+    x <- inputFileParentage()
+    if (nrow(x) == 0) {
+      output$view_parentage <- renderUI({ NULL })
+    } else {
+      output$view_parentage <- renderUI({
+        dataTableOutput("uploadParentageData")
+      })
+    }
+  })
+  
+  #### CREATE VARIABLES ####
+  
+  # All sample data
+  allData <- reactive({
+    xy <- inputFileSamples()
+  })
+  
+  # Subset data based on input from slider
+  fData <- reactive({
+    xy <- inputFileSamples()
+    if (nrow(xy) > 0) {
+      xy[(xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
+    } else {
+      xy[0, ]
+    }
+  })
+  
+  wolfPicks <- reactive({
+    xy <- fData()
+    if (nrow(xy) > 0 & length(input$animals) > 0) {
+      xy[(xy$animal %in% input$animals), ]
+    } else {
+      xy[0, ]
+    }
+  })
+  
+  # Filter out offspring from data
+  fOffs <- reactive({
+    xy <- fData()
+    x <- wolfPicks()$animal
+    offspring <- inputFileParentage()
+    if (nrow(offspring) > 0) {
+      offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "sibling"]
+      xy[(xy$animal %in% offs) & (xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
+    } else {
+      offspring
+    }
+  })
+  
+  #### DYNAMIC UI ####
+  
+  observe({
+    if (nrow(allData()) == 0) {
+      output$comment <- renderUI({
+        h4("Load some data first")
+      })
+    } else {
+      output$comment <- renderUI({ NULL })
+    }
+  })
+  
+  observe({
+    if (nrow(allData()) > 0) {
+      output$animals <- renderUI({
+        xy <- allData()
+        selectInput("animals", "Select Animal", multiple = TRUE, choices = unique(xy$animal)) })
+    } else {
+      output$animals <- renderUI({ NULL })
+    }
+  })
+  
+  observe({
+    if (nrow(allData()) == 0) {
+      output$sliderDate <- renderUI({ NULL })
+    } else {
+      output$sliderDate <- renderUI({
+        sliderInput("datumrange", "Datum range", min = min(allData()$time), max = max(allData()$time),
+                    value = range(allData()$time), step = 1)
+      })
+    }
+  }) 
+  
+  observe({
+    if (nrow(allData()) == 0) {
+      output$opacity <- renderUI({ NULL })
+    } else {
+      output$opacity <- renderUI({
+        sliderInput("opacityrange", "Line/Point opacity", min = 0, max = 1,
+                    value = 0.8, step = 0.1, dragRange = FALSE)
+      })
+    }
+  })
+  
+  observe({
+    # If there is some input in input$animal, display this menu
+    picks <- wolfPicks()
+    sibs <- fOffs()
+    print(sibs)
+    if (nrow(sibs) == 0) {
+      output$offspring <- renderUI({ NULL })
+    } else {
+      output$offspring <- renderUI({
+        selectInput("offspring", "Offspring", multiple = TRUE, choices = sibs$animal)
+      })
+    }
+  })
+  
+  #### LEAFLET MAGIC ####
+  
+  # Create empty map with specified bounds
+  output$map <- renderLeaflet({
+    leaflet() %>% 
+      addProviderTiles(provider = providers$Stamen.Terrain,
+                       options = providerTileOptions(noWrap = TRUE,
+                                                     detectRetina = TRUE,
+                                                     reuseTiles = TRUE)) %>% 
+      setView(lng = 14.815333, lat = 46.119944, zoom = 8)
+  })
+  
+  # Add markers and lines for selected animals to map
+  observe({
+    xy <- allData()
+    picks <- wolfPicks()
+    if (nrow(xy) > 0) {
+      
+      # Add "baselayer"
+      outmap <- leafletProxy("map") %>% 
+        clearMarkers() %>%
+        clearShapes() %>%
+        addCircleMarkers(data = xy, lat = ~lat, lng = ~lng, 
+                         radius = PS, 
+                         stroke = TRUE, 
+                         weight = 0.8,
+                         opacity = 0.5,
+                         color = "black",
+                         fill = TRUE,
+                         fillOpacity = 0.2, 
+                         fillColor = "black", 
+                         layerId = paste("allMarkers", xy$id, sep = " "),
+                         popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
+      
+      
+      if (nrow(picks) > 0) {
+        # Add lines
+        for (i in unique(picks$animal)) {
+          outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, 
+                                 layerId = paste("aniLines", picks$id[picks$animal == i], sep = " "),
+                                 data = picks[picks$animal == i, ],
+                                 color = "black", 
+                                 opacity = input$opacityrange, 
+                                 weight = 1)
+        }
+        # Add markers
+        outmap %>%
+          removeMarker(layerId = paste("allMarkers", picks$id, sep = " ")) %>% 
+          addCircleMarkers(data = picks,
+                           lat = ~lat, lng = ~lng, 
+                           radius = PS, 
+                           stroke = FALSE,
+                           fillColor = ~pal(type),
+                           fillOpacity = input$opacityrange, 
+                           layerId = paste("aniMarkers", picks$id, sep = " "),
+                           popup = paste(picks$type, "from", picks$animal, "on", picks$time, sep = " "))
+      }
+    }
+  })
+  
+  # Add markers and lines for selected offspring to map
+  observe({
+    sibsInput <- input$offspring
+    sibs <- fOffs()[fOffs()$animal %in% sibsInput, ]
     
     out.sibs <- leafletProxy("map") %>% 
       # Remove all previous points and lines
@@ -209,8 +336,3 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
-
-
-
-
-

@@ -30,7 +30,9 @@ xy <- do.call(rbind, xy)
 xy$animal <- sprintf("%.3d", rep(1:NIND, each = N))
 xy$id <- as.character(1:nrow(xy))
 
-
 siblings <- data.frame(sibling = sprintf("%.3d", 5:NIND),
                        mother = c("001", "002"),
                        father = c("003", "004"))
+
+write.table(x = xy, file = "data.csv", sep = ",", row.names = FALSE, quote = FALSE)
+write.table(x = siblings, file = "siblings.csv", sep = ",", row.names = FALSE, quote = FALSE)

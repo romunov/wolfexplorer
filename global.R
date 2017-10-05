@@ -1,9 +1,3 @@
-library(shiny)
-library(leaflet)
-library(RColorBrewer)
-
-source("generate_fake_data.R")
-
 PS <- 5 ## Point size
 
 icons <- iconList(
