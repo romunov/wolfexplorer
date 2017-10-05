@@ -4,47 +4,88 @@ library(leaflet)
 library(RColorBrewer)
 library(rhandsontable)
 library(DT)
-
 source("generate_fake_data.R")
+source("global.R")
 
-header <- dashboardHeader(title = "wolfexplorer")
+header <- dashboardHeader(title = "wolfexplorer",
+                          # Set height of dashboardHeader
+                          tags$li(class = "dropdown",
+                                  tags$style(".main-header {max-height: 25px}"),
+                                  tags$style(".main-header .logo {height: 25px; line-height: 25px;}"),
+                                  tags$style(".sidebar-toggle {height: 25px; padding-top: 2px !important;}"),
+                                  tags$style(".navbar {min-height:25px !important}")
+                          )
+)
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    menuItem("About wolfexplorer", tabName = "about", icon = icon("database")),
-    menuItem("Data input", tabName = "input", icon = icon("plus-circle")),
-    menuItem("Explore data", tabName = "explore", icon = icon("plus-circle"))
+    menuItem("Explore data", tabName = "explore", icon = icon("search")),
+    menuItem("Data input", tabName = "upload", icon = icon("upload")),
+    menuItem("About wolfexplorer", tabName = "about", icon = icon("paw"))
   )
 )
 
 body <- dashboardBody(
+  tags$style(type = "text/css", "#map {height: calc(100vh - 55px) !important;}"),
   tabItems(
     tabItem(tabName = "about",
             h4("What is wolfexplorer?")),
-    tabItem(tabName = "input",
-            fileInput(inputId = "file", label = "Load data", buttonLabel = "Submit file"),
-            h4("Dataset overview"),
-            rhandsontable(xy)),
+    tabItem(tabName = "upload",
+            fileInput(inputId = "submitFile", 
+                      label = "Upload dataset",
+                      buttonLabel = "Submit CSV file"),
+            # accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"),
+            uiOutput("overview")
+    ),
     tabItem(tabName = "explore",
-            fluidPage(
-              box(solidHeader = TRUE, width = "100%",
-                  leafletOutput("map"),
-                  absolutePanel(top = 10, right = 10,
-                                sliderInput("datumrange", "Datum range", min = min(xy$time), max = max(xy$time),
-                                            value = range(xy$time), step = 1),
-                                uiOutput("animals"),
-                                uiOutput("siblings")
-                  ),
-                  absolutePanel(bottom = 10, right = 10,
-                                sliderInput("opacityrange", "Line/Point opacity", min = 0, max = 1,
-                                            value = 0.7, step = 0.1, dragRange = FALSE, width = "70%"))
-              )))
+            
+            div(class="outer",
+                
+                tags$head(
+                  # Include our custom CSS
+                  includeCSS("styles.css")
+                  # includeScript("gomap.js")
+                ),
+                
+                leafletOutput("map"),
+                absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+                              draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
+                              width = 330, height = "auto",
+                              
+                              sliderInput("datumrange", "Datum range", min = min(xy$time), max = max(xy$time),
+                                          value = range(xy$time), step = 1),
+                              uiOutput("animals"),
+                              uiOutput("siblings"),
+                              sliderInput("opacityrange", "Line/Point opacity", min = 0, max = 1,
+                                          value = 0.8, step = 0.1, dragRange = FALSE)
+                )
+            )
+    )
   )
 )
+
 
 ui <- dashboardPage(header, sidebar, body, skin = "black")
 
 server <- function(input, output) {
+  
+  # dataset <- observeEvent(input$submitFile, {
+  #   x <- input$file
+  #   if (is.null(x))
+  #     return(NULL)
+  #   else {
+  #     x <- read.csv(x$datapath, header = TRUE, sep = input$sep,
+  #                   encoding = "UTF-8", stringsAsFactors = FALSE)
+  #     x
+  #   }
+  # })
+  # 
+  # output$overview <- renderUI({
+  #   box(title = "Dataset overview", solidHeader = TRUE, width = 12, collapsible = TRUE,
+  #       DT::datatable(data = dataset(), filter = "top", fillContainer = TRUE)
+  #   )
+  # })
+  
   # Create empty map with specified bounds
   output$map <- renderLeaflet({
     leaflet(data = xy) %>% 
