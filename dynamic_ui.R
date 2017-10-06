@@ -72,7 +72,7 @@ observe({
 })
 
 observe({
-  if (nrow(allData()) == 0) {
+  if (nrow(fOffs()) == 0) {
     output$offspring_opacity <- renderUI({
       NULL
     })
