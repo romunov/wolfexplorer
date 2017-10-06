@@ -11,7 +11,7 @@ allData <- reactive({
 fData <- reactive({
   xy <- inputFileSamples()
   if (nrow(xy) > 0) {
-    xy[(xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
+    xy[(xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     xy[0, ]
   }
@@ -33,7 +33,7 @@ fOffs <- reactive({
   offspring <- inputFileParentage()
   if (nrow(offspring) > 0) {
     offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "sibling"]
-    xy[(xy$animal %in% offs) & (xy$time >= input$datumrange[1] & xy$time <= input$datumrange[2]), ]
+    xy[(xy$animal %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     offspring
   }

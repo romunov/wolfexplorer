@@ -24,8 +24,8 @@ observe({
     output$sliderDate <- renderUI({ NULL })
   } else {
     output$sliderDate <- renderUI({
-      sliderInput("datumrange", "Date range", min = min(allData()$time), max = max(allData()$time),
-                  value = range(allData()$time), step = 1)
+      sliderInput("datumrange", "Date range", min = min(allData()$date), max = max(allData()$date),
+                  value = range(allData()$date), step = 1)
     })
   }
 }) 
