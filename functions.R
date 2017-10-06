@@ -26,3 +26,19 @@ GKtoWGS <- function(df) {
     df
   }
 }
+
+
+#' Create popup for samples.
+populatePopup <- function(x) {
+  out <- sprintf("<dl>
+                   <dt>animal: %s</dt>
+                   <dt>date: %s</dt>
+                   <dt>sex: %s</dt>
+                   <dt>sample type: %s</dt>
+                 </dl>",
+                 x$animal,
+                 x$date,
+                 x$sex,
+                 x$sample_type)
+  out
+}

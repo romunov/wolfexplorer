@@ -8,7 +8,7 @@ library(rgdal)
 library(data.table)
 
 source("global.R")
-source("GKtoWGS.R")
+source("functions.R")
 
 #### HEADER ####
 

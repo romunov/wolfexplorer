@@ -30,7 +30,7 @@ observe({
                        fillOpacity = 0.2, 
                        fillColor = "black", 
                        layerId = paste("allMarkers", xy$id, sep = " "),
-                       popup = paste(xy$sample_type, "from", xy$animal, "on", xy$date, sep = " "))
+                       popup = populatePopup(xy))
     
     
     if (nrow(picks) > 0) {
@@ -53,7 +53,7 @@ observe({
                          fillColor = ~pal(sample_type),
                          fillOpacity = input$parent_opacity, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
-                         popup = paste(picks$sample_type, "from", picks$animal, "on", picks$date, sep = " "))
+                         popup = populatePopup(picks))
     }
   }
 })
