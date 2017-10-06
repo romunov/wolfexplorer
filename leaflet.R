@@ -29,7 +29,7 @@ observe({
                        fillOpacity = 0.2, 
                        fillColor = "black", 
                        layerId = paste("allMarkers", xy$id, sep = " "),
-                       popup = paste(xy$type, "from", xy$animal, "on", xy$time, sep = " "))
+                       popup = paste(xy$sample_type, "from", xy$animal, "on", xy$time, sep = " "))
     
     
     if (nrow(picks) > 0) {
@@ -49,10 +49,10 @@ observe({
                          lat = ~lat, lng = ~lng, 
                          radius = PS, 
                          stroke = FALSE,
-                         fillColor = ~pal(type),
+                         fillColor = ~pal(sample_type),
                          fillOpacity = input$opacityrange, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
-                         popup = paste(picks$type, "from", picks$animal, "on", picks$time, sep = " "))
+                         popup = paste(picks$sample_type, "from", picks$animal, "on", picks$time, sep = " "))
     }
   }
 })
@@ -87,7 +87,7 @@ observe({
                        data = sibs, 
                        radius = PS,
                        stroke = FALSE,
-                       fillColor = ~pal(type),
+                       fillColor = ~pal(sample_type),
                        fillOpacity = input$opacityrange,
                        layerId = paste("sibMarkers", sibs$id, sep = " "),
                        group = "sibMarkers")

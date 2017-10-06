@@ -1,7 +1,7 @@
 inputFileSamples <- reactive({
   x <- input$data_samples
   if (is.null(x)) {
-    data.frame(lng = NA, lat = NA, time = NA, type = NA, animal = NA, id = NA)[0, ]
+    data.frame(lng = NA, lat = NA, time = NA, sample_type = NA, animal = NA, id = NA)[0, ]
   } else {
     read.csv(x$datapath, header = TRUE, sep = ",",
              encoding = "UTF-8", stringsAsFactors = FALSE, 
@@ -12,7 +12,7 @@ inputFileSamples <- reactive({
 inputFileParentage <- reactive({
   x <- input$data_parentage
   if (is.null(x)) {
-    data.frame(sibling = NA, mother = NA, father = NA)[0, ]
+    data.frame(offspring = NA, mother = NA, father = NA, cluster = NA)[0, ]
   } else {
     read.csv(x$datapath, header = TRUE, sep = ",",
              encoding = "UTF-8", stringsAsFactors = FALSE,
