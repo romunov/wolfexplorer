@@ -30,7 +30,6 @@ sidebar <- dashboardSidebar(
   )
 )
 
-
 #### BODY ####
 body <- dashboardBody(
   tags$style(type = "text/css", "#map {height: 100% !important;}"),
