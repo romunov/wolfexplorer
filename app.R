@@ -4,7 +4,9 @@ library(leaflet)
 library(RColorBrewer)
 library(rhandsontable)
 library(DT)
+library(sp)
 source("global.R")
+source("GKtoWGS.R")
 
 #### UI ####
 
