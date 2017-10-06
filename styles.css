@@ -27,9 +27,25 @@ h1, h2, h3, h4 { font-weight: 400; }
   /* Fade out while not hovering */
   opacity: 0.2;
   zoom: 0.9;
-  transition: opacity 500ms 1s;
+  transition: opacity 500ms 100ms;
 }
 #controls:hover {
+  /* Fade in while hovering */
+  opacity: 0.95;
+  transition-delay: 0;
+}
+
+#display_controls {
+  /* Appearance */
+  background-color: white;
+  padding: 10px 15px 10px 15px;
+  cursor: move;
+  /* Fade out while not hovering */
+  opacity: 0.2;
+  zoom: 0.9;
+  transition: opacity 500ms 100ms;
+}
+#display_controls:hover {
   /* Fade in while hovering */
   opacity: 0.95;
   transition-delay: 0;
