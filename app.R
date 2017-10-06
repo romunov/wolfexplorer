@@ -8,23 +8,12 @@ library(sp)
 source("global.R")
 source("GKtoWGS.R")
 
-#### UI ####
-
-
 #### HEADER ####
 
-header <- dashboardHeader(title = "wolfexplorer"
-                          # # Set height of dashboardHeader
-                          # tags$li(class = "dropdown",
-                          #         tags$style(".main-header {max-height: 25px}"),
-                          #         tags$style(".main-header .logo {height: 25px; line-height: 25px;}"),
-                          #         tags$style(".sidebar-toggle {height: 25px; padding-top: 2px !important;}"),
-                          #         tags$style(".navbar {min-height:25px !important}")
-                          # )
-)
-
+header <- dashboardHeader(title = "wolfexplorer")
 
 #### SIDEBAR ####
+
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Explore data", tabName = "explore", icon = icon("search")),
