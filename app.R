@@ -21,6 +21,7 @@ sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Explore data", tabName = "explore", icon = icon("paw")),
     menuItemOutput(outputId = "menu_data"),
+    menuItem("Dataset overview", tabName = "overview", icon = icon("database")),
     br(),
     uiOutput("parent_opacity"),
     uiOutput("offspring_opacity"),
@@ -73,6 +74,10 @@ body <- dashboardBody(
             br(),
             br(),
             uiOutput("view_parentage")
+    ),
+    tabItem(tabName = "overview",
+            h3("Quick statistics of dataset"),
+            uiOutput("stats")
     )
   )
 )

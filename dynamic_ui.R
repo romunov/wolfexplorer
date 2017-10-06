@@ -107,3 +107,35 @@ observe({
     })
   }
 })
+
+observe({
+  xy <- allData()
+  par <- inputFileParentage()
+  
+  if(nrow(xy) > 0) {
+    ani <- length(unique(xy$animal))
+    male <- length(xy$sex[xy$sex == "M"])
+    female <- length(xy$sex[xy$sex == "F"])
+    clusters <- length(unique(par$cluster))
+    sam <- nrow(xy)
+    daterange <- paste(format(min(xy$date), "%d.%m.%Y" ), "-", format(max(xy$date), "%d.%m.%Y"), sep = " ")
+  } else {
+    ani <- 0
+    male <- 0
+    female <- 0
+    clusters <- 0
+    sam <- 0
+    daterange <- 0
+  }
+  
+  output$stats <- renderUI({
+    fluidRow(
+      infoBox(title = "Animals", value = ani, icon = icon("paw"), color = "olive", width = 3),
+      infoBox(title = "Males", value = male, icon = icon("mars"), color = "light-blue", width = 3),
+      infoBox(title = "Females", value = female, icon = icon("venus"), color = "orange", width = 3),
+      infoBox(title = "Clusters", value = clusters, icon = icon("group"), color = "red", width = 3),
+      infoBox(title = "Samples", value = sam, icon = icon("flask"), color = "yellow", width = 3),
+      infoBox(title = "Date range", value = daterange, icon = icon("calendar"), color = "purple", width = 3)
+    )
+  })
+})
