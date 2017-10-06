@@ -5,6 +5,7 @@ library(RColorBrewer)
 library(DT)
 library(sp)
 library(rgdal)
+library(data.table)
 
 source("global.R")
 source("GKtoWGS.R")
