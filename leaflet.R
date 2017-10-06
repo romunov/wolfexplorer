@@ -13,6 +13,7 @@ observe({
   PS <- PS()
   xy <- allData()
   picks <- wolfPicks()
+  
   if (nrow(xy) > 0) {
     
     # Add "baselayer"

@@ -29,10 +29,10 @@ wolfPicks <- reactive({
 # Filter out offspring from data
 fOffs <- reactive({
   xy <- fData()
-  x <- wolfPicks()$animal
+  x <- unique(wolfPicks()$animal)
   offspring <- inputFileParentage()
   if (nrow(offspring) > 0) {
-    offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "sibling"]
+    offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "offspring"]
     xy[(xy$animal %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     offspring

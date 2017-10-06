@@ -58,6 +58,7 @@ observe({
   # If there is some input in input$animal, display this menu
   picks <- wolfPicks()
   sibs <- fOffs()
+  
   if (nrow(sibs) == 0) {
     output$offspring <- renderUI({ NULL })
   } else {

@@ -2,9 +2,10 @@ library(shiny)
 library(shinydashboard)
 library(leaflet)
 library(RColorBrewer)
-library(rhandsontable)
 library(DT)
 library(sp)
+library(rgdal)
+
 source("global.R")
 source("GKtoWGS.R")
 
@@ -31,13 +32,11 @@ body <- dashboardBody(
     tabItem(tabName = "explore",
             
             div(class="outer",
-                
                 tags$head(
                   # Include our custom CSS
                   includeCSS("styles.css")
                   # includeScript("gomap.js")
                 ),
-                
                 leafletOutput("map"),
                 absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                               draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
