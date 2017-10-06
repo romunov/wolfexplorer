@@ -40,7 +40,7 @@ observe({
                                layerId = paste("aniLines", picks$id[picks$animal == i], sep = " "),
                                data = picks[picks$animal == i, ],
                                color = "black", 
-                               opacity = input$opacityrange, 
+                               opacity = input$parent_opacity, 
                                weight = 1)
       }
       # Add markers
@@ -51,7 +51,7 @@ observe({
                          radius = PS, 
                          stroke = FALSE,
                          fillColor = ~pal(sample_type),
-                         fillOpacity = input$opacityrange, 
+                         fillOpacity = input$parent_opacity, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
                          popup = paste(picks$sample_type, "from", picks$animal, "on", picks$date, sep = " "))
     }
@@ -61,36 +61,36 @@ observe({
 # Add markers and lines for selected offspring to map
 observe({
   PS <- PS()
-  sibsInput <- input$offspring
-  sibs <- fOffs()[fOffs()$animal %in% sibsInput, ]
+  offInput <- input$offspring
+  off <- fOffs()[fOffs()$animal %in% offInput, ]
   
-  out.sibs <- leafletProxy("map") %>% 
+  out.off <- leafletProxy("map") %>% 
     # Remove all previous points and lines
     clearGroup(group = "sibMarkers") %>% 
     clearGroup(group = "sibLines")
   
-  if (nrow(sibs) > 0) {
-    out.sibs <- leafletProxy("map") %>% 
+  if (nrow(off) > 0) {
+    out.off <- leafletProxy("map") %>% 
       # Remove all previous points and lines
       clearGroup(group = "sibMarkers") %>% 
       clearGroup(group = "sibLines")
     # Add lines
-    for (i in unique(sibs$animal)) {
-      out.sibs <- addPolylines(map = out.sibs, lng = ~lng, lat = ~lat, 
-                               layerId = paste("sibLines", sibs$id[sibs$animal == i], sep = " "),
-                               data = sibs[sibs$animal == i, ],
-                               color = "#fdc086", opacity = input$opacityrange, weight = 1, group = "sibLines")
+    for (i in unique(off$animal)) {
+      out.off <- addPolylines(map = out.off, lng = ~lng, lat = ~lat, 
+                               layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
+                               data = off[off$animal == i, ],
+                               color = "#fdc086", opacity = input$offspring_opacity, weight = 1, group = "sibLines")
     }
     # Add points
-    out.sibs %>%
-      removeMarker(layerId = paste("allMarkers", sibs$id, sep = " ")) %>% 
+    out.off %>%
+      removeMarker(layerId = paste("allMarkers", off$id, sep = " ")) %>% 
       addCircleMarkers(lat = ~lat, lng = ~lng, 
-                       data = sibs, 
+                       data = off, 
                        radius = PS,
                        stroke = FALSE,
                        fillColor = ~pal(sample_type),
-                       fillOpacity = input$opacityrange,
-                       layerId = paste("sibMarkers", sibs$id, sep = " "),
+                       fillOpacity = input$offspring_opacity,
+                       layerId = paste("sibMarkers", off$id, sep = " "),
                        group = "sibMarkers")
   }
 })

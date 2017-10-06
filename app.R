@@ -11,16 +11,19 @@ source("GKtoWGS.R")
 
 #### HEADER ####
 
-header <- dashboardHeader(title = "wolfexplorer")
+header <- dashboardHeader(title = "wolfexplorer",
+                          dropdownMenuOutput("notifications"))
 
 #### SIDEBAR ####
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    menuItem("Explore data", tabName = "explore", icon = icon("search")),
-    menuItem("Data input", tabName = "upload", icon = icon("upload"), startExpanded = TRUE,
-             menuSubItem(text = "Submit data", tabName = "data_samples"),
-             menuSubItem(text = "Submit parentage data", tabName = "data_parentage"))
+    menuItem("Explore data", tabName = "explore", icon = icon("paw")),
+    menuItemOutput(outputId = "menu_data"),
+    br(),
+    uiOutput("parent_opacity"),
+    uiOutput("offspring_opacity"),
+    uiOutput("dotSize")
   )
 )
 
@@ -45,12 +48,6 @@ body <- dashboardBody(
                               uiOutput("sliderDate"),
                               uiOutput("animals"),
                               uiOutput("offspring")
-                ),
-                absolutePanel(id = "display_controls", class = "panel panel-default", fixed = TRUE,
-                              draggable = FALSE, top = "auto", left = "auto", right = 20, bottom = 30,
-                              width = 330, height = "auto",
-                              uiOutput("opacity"),
-                              uiOutput("dotSize")
                 )
             )
     ),

@@ -6,7 +6,6 @@ inputFileSamples <- reactive({
     x <- read.csv(x$datapath, header = TRUE, sep = ",",
                   encoding = "UTF-8", stringsAsFactors = FALSE, 
                   colClasses = c("numeric", "numeric", "Date", "character", "character", "character", "character" ))
-    print(x)
     x <- GKtoWGS(x)
     x$id <- 1:nrow(x)
     x
