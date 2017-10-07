@@ -8,6 +8,15 @@ output$map <- renderLeaflet({
     setView(lng = 14.815333, lat = 46.119944, zoom = 8)
 })
 
+observeEvent(input$uploadSampleData_row_last_clicked, {
+  x <- inputFileSamples()
+  selectedRow <- input$uploadSampleData_row_last_clicked
+
+  leafletProxy('map') %>%
+    setView(lng = x[selectedRow, 'lng'], lat = x[selectedRow, 'lat'], zoom = 10)
+
+}, ignoreInit = TRUE)
+
 # Add markers and lines for selected animals to map
 observe({
   PS <- PS()
