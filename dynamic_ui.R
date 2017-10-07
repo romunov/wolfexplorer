@@ -139,3 +139,33 @@ observe({
     )
   })
 })
+
+observe({
+  xy <- allData()
+  par <- inputFileParentage()
+  
+  
+  if(nrow(xy) > 0) {
+    output$sps <- renderPlot({
+      ggplot(xy)  +
+        theme_bw() +
+        geom_bar(aes(sample_type))
+    })
+    # output$opp <- renderPlot({
+    #   ggplot(par) +
+    #     theme_bw() +
+    #     geom_col(aes(x = unique(c(mother, father), y = offspring)))
+    # })
+    output$graphs <- renderUI({
+      fluidRow(
+        box(solidHeader = TRUE, title = "Samples per sample type",
+            plotOutput("sps"))
+        # box(solidHeader = TRUE, title = "Number of offspring per parent",
+        #     plotOutput("opp"))
+      ) 
+    })
+  }
+  
+  
+})
+

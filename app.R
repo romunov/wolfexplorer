@@ -6,6 +6,7 @@ library(DT)
 library(sp)
 library(rgdal)
 library(data.table)
+library(ggplot2)
 
 source("global.R")
 source("functions.R")
@@ -28,7 +29,6 @@ sidebar <- dashboardSidebar(
     uiOutput("dotSize")
   )
 )
-
 
 #### BODY ####
 body <- dashboardBody(
@@ -76,8 +76,8 @@ body <- dashboardBody(
             uiOutput("view_parentage")
     ),
     tabItem(tabName = "overview",
-            h3("Quick statistics of dataset"),
-            uiOutput("stats")
+            uiOutput("stats"),
+            uiOutput("graphs")
     )
   )
 )

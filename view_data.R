@@ -1,6 +1,6 @@
 output$uploadSampleData <- renderDataTable({
   x <- inputFileSamples()
-  DT::datatable(data = x, filter = "top", options = list(pageLength = 15))
+  DT::datatable(data = x, filter = "top", options = list(pageLength = 15), selection = 'single')
 })
 
 observe({
