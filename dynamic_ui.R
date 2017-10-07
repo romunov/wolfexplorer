@@ -143,25 +143,34 @@ observe({
 observe({
   xy <- allData()
   par <- inputFileParentage()
-  
+  offs <- data.frame(table(c(par$mother, par$father)))
   
   if(nrow(xy) > 0) {
+    
     output$sps <- renderPlot({
       ggplot(xy)  +
-        theme_bw() +
-        geom_bar(aes(sample_type))
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+              legend.position="none",
+              axis.title = element_blank()) +
+        geom_bar(aes(x = sample_type))
     })
-    # output$opp <- renderPlot({
-    #   ggplot(par) +
-    #     theme_bw() +
-    #     geom_col(aes(x = unique(c(mother, father), y = offspring)))
-    # })
+    
+    output$opp <- renderPlot({
+      ggplot(na.omit(offs)) +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+              legend.position="none",
+              axis.title = element_blank()) +
+        geom_col(aes(x = Var1, y = Freq))
+    })
+    
     output$graphs <- renderUI({
       fluidRow(
         box(solidHeader = TRUE, title = "Samples per sample type",
-            plotOutput("sps"))
-        # box(solidHeader = TRUE, title = "Number of offspring per parent",
-        #     plotOutput("opp"))
+            plotOutput("sps")),
+        box(solidHeader = TRUE, title = "Number of offspring per parent",
+            plotOutput("opp"))
       ) 
     })
   }
