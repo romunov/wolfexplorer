@@ -143,7 +143,7 @@ observe({
 observe({
   xy <- allData()
   par <- inputFileParentage()
-  offs <- data.frame(table(c(par$mother, par$father)))
+  offs <- data.frame(table(c(par$mother, par$father))) # Get number of offspring per parent
   
   if(nrow(xy) > 0) {
     
