@@ -19,8 +19,14 @@ inputFileParentage <- reactive({
   if (is.null(x)) {
     data.frame(offspring = NA, mother = NA, father = NA, cluster = NA)[0, ]
   } else {
-    fread(x$datapath, encoding = "UTF-8", 
+    out <- fread(x$datapath, encoding = "UTF-8", 
           colClasses = c("character", "character", "character", "character"),
           data.table = FALSE)
+    
+    # if column names do not match predefined form, warn user
+    validate(
+      need(all(colnames(out) %in% c("offspring", "mother", "father", "cluster")), "Something wrong with input")
+    )
+    return(out)
   }
 })
