@@ -11,10 +11,10 @@ output$map <- renderLeaflet({
 observeEvent(input$uploadSampleData_row_last_clicked, {
   x <- inputFileSamples()
   selectedRow <- input$uploadSampleData_row_last_clicked
-
+  
   leafletProxy('map') %>%
     setView(lng = x[selectedRow, 'lng'], lat = x[selectedRow, 'lat'], zoom = 10)
-
+  
 }, ignoreInit = TRUE)
 
 # Add markers and lines for selected animals to map
@@ -24,6 +24,10 @@ observe({
   picks <- wolfPicks()
   
   if (nrow(xy) > 0) {
+    # Create custom palette based on all samples. This should prevent the legend
+    # from changing if subset should not contain all levels.
+    custom.colors <- brewer.pal(n = length(levels(picks$sample_type)), name = "Set1")
+    pal <- colorFactor(palette = custom.colors, levels = levels(picks$sample_type), ordered = TRUE)
     
     # Add "baselayer"
     outmap <- leafletProxy("map") %>% 
@@ -39,8 +43,7 @@ observe({
                        fillOpacity = 0.2, 
                        fillColor = "black", 
                        layerId = paste("allMarkers", xy$id, sep = " "),
-                       popup = populatePopup(xy))
-    
+                       popup = populatePopup(xy)) 
     
     if (nrow(picks) > 0) {
       # Add lines
@@ -62,7 +65,12 @@ observe({
                          fillColor = ~pal(sample_type),
                          fillOpacity = input$parent_opacity, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
-                         popup = populatePopup(picks))
+                         popup = populatePopup(picks)) %>%
+        clearControls() %>%
+        addLegend("bottomright",
+                  pal = pal, values = picks$sample_type,
+                  title = "Sample type",
+                  opacity = 1)
     }
   }
 })
@@ -86,9 +94,9 @@ observe({
     # Add lines
     for (i in unique(off$animal)) {
       out.off <- addPolylines(map = out.off, lng = ~lng, lat = ~lat, 
-                               layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
-                               data = off[off$animal == i, ],
-                               color = "#fdc086", opacity = input$offspring_opacity, weight = 1, group = "sibLines")
+                              layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
+                              data = off[off$animal == i, ],
+                              color = "#fdc086", opacity = input$offspring_opacity, weight = 1, group = "sibLines")
     }
     # Add points
     out.off %>%
