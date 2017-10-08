@@ -178,3 +178,33 @@ observe({
   
 })
 
+observe({
+  # try to find data for colors. if not found, create one
+  # storage of this should be ported to a database at one point
+  if (nrow(allData()) > 0) {
+    st <- levels(allData()$sample_type)
+    
+    if (!exists("color.df", inherits = TRUE)) {
+      colors.df <- data.frame(sample_type_levels = st,
+                              sample_type_colors = brewer.pal(n = length(st), name = "Set1"))
+    }
+    
+    # now that colors.df surely exists somewhere, let's construct a settings page from
+    # all sample types
+    pal <- colorFactor(palette = colors.df$sample_type_colors, 
+                       levels = colors.df$sample_type_levels, ordered = TRUE)
+    colors.df$ui_name <- sprintf("ui_%s", gsub(" ", "_", tolower(colors.df$sample_type_levels)))
+  }
+  
+  output$settings <- renderUI({
+    # tabs <- lapply(FUN = function(x, cldf) {
+    #   colourInput(inputId = x, label = )
+    # })
+    # do.call(tabBox, c(tabs, title = tagList(shiny::icon("gear"), "tabBox status")))
+    # tabPanel(title = "Legend colors",
+    # colorInput
+    # id = "tab_colorpicker", title = "Settings"
+    # )
+    # )
+  })
+})

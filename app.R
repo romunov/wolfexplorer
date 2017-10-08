@@ -23,6 +23,7 @@ sidebar <- dashboardSidebar(
     menuItem("Explore data", tabName = "explore", icon = icon("paw")),
     menuItemOutput(outputId = "menu_data"),
     menuItem("Dataset overview", tabName = "overview", icon = icon("database")),
+    menuItem("Settings", tabName = "settings"),
     br(),
     uiOutput("parent_opacity"),
     uiOutput("offspring_opacity"),
@@ -35,7 +36,6 @@ body <- dashboardBody(
   tags$style(type = "text/css", "#map {height: 100% !important;}"),
   tabItems(
     tabItem(tabName = "explore",
-            
             div(class="outer",
                 tags$head(
                   # Include our custom CSS
@@ -78,9 +78,22 @@ body <- dashboardBody(
     tabItem(tabName = "overview",
             uiOutput("stats"),
             uiOutput("graphs")
+    ),
+    tabItem(tabName = "settings",
+            fluidRow(
+            tabBox(side = "left", selected = "Colors",
+                   width = 12,
+                   tabPanel("General", "some general text"),
+                   tabPanel("Colors",
+                            colourInput("col1", "Sample type 1", "red", palette = "limited"),
+                            colourInput("col2", "Sample type 2", "green", palette = "limited"),
+                            colourInput("col3", "Sample type 3", "blue", palette = "limited"))
+            )
+            )
     )
   )
 )
+
 
 ui <- dashboardPage(header, sidebar, body, skin = "black")
 
@@ -106,3 +119,5 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
+
+
