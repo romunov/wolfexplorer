@@ -107,7 +107,7 @@ observe({
     }
     # Add points
     out.off %>%
-      removeMarker(layerId = paste("allMarkers", off$id, sep = " ")) %>% 
+      # removeMarker(layerId = paste("allMarkers", off$id, sep = " ")) %>% 
       addCircleMarkers(lat = ~lat, lng = ~lng, 
                        data = off, 
                        radius = PS,
