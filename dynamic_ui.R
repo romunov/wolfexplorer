@@ -20,7 +20,7 @@ observe({
 
 observe({
   output$menu_data <- renderMenu({
-    menuItem("Data", tabName = "upload", icon = icon("upload"), startExpanded = TRUE, 
+    menuItem("Load data", tabName = "upload", icon = icon("paw"), startExpanded = TRUE, 
              menuSubItem(text = "Samples data", tabName = "data_samples"),
              menuSubItem(text = "Parentage data", tabName = "data_parentage"))
   })
@@ -133,7 +133,7 @@ observe({
       infoBox(title = "Animals", value = ani, icon = icon("paw"), color = "olive", width = 3),
       infoBox(title = "Males", value = male, icon = icon("mars"), color = "light-blue", width = 3),
       infoBox(title = "Females", value = female, icon = icon("venus"), color = "orange", width = 3),
-      infoBox(title = "Clusters", value = clusters, icon = icon("group"), color = "red", width = 3),
+      infoBox(title = "Clusters", value = clusters, icon = icon("cubes"), color = "red", width = 3),
       infoBox(title = "Samples", value = sam, icon = icon("flask"), color = "yellow", width = 3),
       infoBox(title = "Date range", value = daterange, icon = icon("calendar"), color = "purple", width = 3)
     )

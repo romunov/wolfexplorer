@@ -7,6 +7,7 @@ library(sp)
 library(rgdal)
 library(data.table)
 library(ggplot2)
+library(colourpicker)
 
 source("global.R")
 source("functions.R")
@@ -20,10 +21,10 @@ header <- dashboardHeader(title = "wolfexplorer",
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    menuItem("Explore data", tabName = "explore", icon = icon("paw")),
+    menuItem("Explore data", tabName = "explore", icon = icon("map-o")),
     menuItemOutput(outputId = "menu_data"),
-    menuItem("Dataset overview", tabName = "overview", icon = icon("database")),
-    menuItem("Settings", tabName = "settings"),
+    menuItem("Dataset overview", tabName = "overview", icon = icon("eye")),
+    menuItem("Settings", tabName = "settings", icon = icon("cogs")),
     br(),
     uiOutput("parent_opacity"),
     uiOutput("offspring_opacity"),
