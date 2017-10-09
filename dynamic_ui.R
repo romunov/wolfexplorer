@@ -1,20 +1,26 @@
 observe({
-  xy <- allData()
+  xy <- wolfPicks()
+  df <- fOffs()
+  offInput <- input$offspring
+  offs <- df[df$animal %in% offInput, ]
   
-  if (nrow(xy) > 0) { 
-    ani <- sprintf("Animals: %s", length(unique(xy$animal)))
-    sam <- sprintf("Samples: %s", nrow(xy))
+  if (nrow(xy) > 0) {
+    ani <- sprintf("Parents: %s", length(unique(xy$animal)))
+    sam <- sprintf("Samples: %s", (nrow(xy) + nrow(offs)))
+    off <- sprintf("Offspring: %s", length(unique(offs$animal)))
   } else {
-    ani <- sprintf("Animals: %s", 0)
+    ani <- sprintf("Parents: %s", 0)
     sam <- sprintf("Samples: %s", 0)
+    off <- sprintf("Offspring: %s", 0)
+    
   }
   
-  
   output$notifications <- renderMenu({
-    dropdownMenu(type = "notifications", 
-                 notificationItem(text = ani,
-                                  icon("paw")),
-                 notificationItem(text = sam, icon("flask")))
+    dropdownMenuCustom(type = "notifications", customSentence = customSentence,
+                       notificationItem(text = ani,
+                                        icon("paw")),
+                       notificationItem(text = off, icon("paw")),
+                       notificationItem(text = sam, icon("flask")))
   })
 })
 
@@ -25,7 +31,6 @@ observe({
              menuSubItem(text = "Parentage data", tabName = "data_parentage"))
   })
 })
-
 
 observe({
   if (nrow(allData()) == 0) {
@@ -56,7 +61,16 @@ observe({
                   value = range(allData()$date), step = 1)
     })
   }
-}) 
+})
+
+observe({
+  if (nrow(allData()) > 0) {
+    output$mortality <- renderUI({
+      checkboxInput(inputId = "muerto", label = "Show mortalities", value = FALSE) })
+  } else {
+    output$mortality <- renderUI({ NULL })
+  }
+})
 
 observe({
   if (nrow(allData()) == 0) {

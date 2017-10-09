@@ -26,6 +26,15 @@ wolfPicks <- reactive({
   }
 })
 
+mortality <- reactive({  ## A samo za izbrane živali al za vse znotraj daterange?
+  xy <- allData()
+  if (nrow(xy) > 0) {
+	xy[xy$sample_type %in% c("Tissue", "Decomposing tissue"), ]
+  } else {
+	xy[0, ]
+  }
+})
+
 # Filter out offspring from data
 fOffs <- reactive({
   xy <- fData()

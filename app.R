@@ -9,7 +9,6 @@ library(data.table)
 library(ggplot2)
 library(colourpicker)
 
-source("global.R")
 source("functions.R")
 
 #### HEADER ####
@@ -28,7 +27,8 @@ sidebar <- dashboardSidebar(
     br(),
     uiOutput("parent_opacity"),
     uiOutput("offspring_opacity"),
-    uiOutput("dotSize")
+    uiOutput("dotSize"),
+    uiOutput("mortality")
   )
 )
 

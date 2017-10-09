@@ -30,8 +30,8 @@ observe({
     # Create custom palette based on all samples. This should prevent the legend
     # from changing if subset should not contain all levels.
     r.pal$pal <- colorFactor(palette = colors.df$mapping$sample_type_colors,
-                       levels = colors.df$mapping$sample_type_levels,
-                       ordered = TRUE)
+                             levels = colors.df$mapping$sample_type_levels,
+                             ordered = TRUE)
     
     # Add "baselayer"
     outmap <- leafletProxy("map") %>% 
@@ -117,5 +117,25 @@ observe({
                        layerId = paste("sibMarkers", off$id, sep = " "),
                        popup = populatePopup(off),
                        group = "sibMarkers")
+  }
+})
+
+# Add mortality markers to map
+observe({
+  xy <- allData()
+  if (nrow(xy) > 0) {
+    is.muerto <- input$muerto
+    print(is.muerto)
+    if (is.null(is.muerto)) { NULL }
+    if (isTRUE(is.muerto)) {
+      xy <- mortality()
+      muerto <- makeIcon(iconUrl = "icons/death.png", iconWidth = 20, iconHeight = 20)
+      leafletProxy(mapId = "map", data = xy) %>%
+        addMarkers(icon = muerto, group = "muerto")
+    }
+    if (!isTRUE(is.muerto)) {
+      leafletProxy(mapId = "map") %>% 
+        clearGroup(group = "muerto")
+    }
   }
 })
