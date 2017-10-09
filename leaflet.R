@@ -18,6 +18,9 @@ observeEvent(input$uploadSampleData_row_last_clicked, {
 }, ignoreInit = TRUE)
 
 # Add markers and lines for selected animals to map
+r.pal <- reactiveValues()
+r.pal$pal <- NULL
+
 observe({
   PS <- PS()
   xy <- allData()
@@ -26,7 +29,7 @@ observe({
   if (nrow(xy) > 0) {
     # Create custom palette based on all samples. This should prevent the legend
     # from changing if subset should not contain all levels.
-    pal <- colorFactor(palette = colors.df$mapping$sample_type_colors,
+    r.pal$pal <- colorFactor(palette = colors.df$mapping$sample_type_colors,
                        levels = colors.df$mapping$sample_type_levels,
                        ordered = TRUE)
     
@@ -63,13 +66,13 @@ observe({
                          lat = ~lat, lng = ~lng, 
                          radius = PS, 
                          stroke = FALSE,
-                         fillColor = ~pal(sample_type),
+                         fillColor = ~r.pal$pal(sample_type),
                          fillOpacity = input$parent_opacity, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
                          popup = populatePopup(picks)) %>%
         clearControls() %>%
         addLegend("bottomright",
-                  pal = pal, values = picks$sample_type,
+                  pal = r.pal$pal, values = picks$sample_type,
                   title = "Sample type",
                   opacity = 1)
     }
@@ -97,7 +100,10 @@ observe({
       out.off <- addPolylines(map = out.off, lng = ~lng, lat = ~lat, 
                               layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
                               data = off[off$animal == i, ],
-                              color = "#fdc086", opacity = input$offspring_opacity, weight = 1, group = "sibLines")
+                              color = "#fdc086", 
+                              opacity = input$offspring_opacity, 
+                              weight = 1, 
+                              group = "sibLines")
     }
     # Add points
     out.off %>%
@@ -106,9 +112,10 @@ observe({
                        data = off, 
                        radius = PS,
                        stroke = FALSE,
-                       fillColor = ~pal(sample_type),
+                       fillColor = ~r.pal$pal(sample_type),
                        fillOpacity = input$offspring_opacity,
                        layerId = paste("sibMarkers", off$id, sep = " "),
+                       popup = populatePopup(off),
                        group = "sibMarkers")
   }
 })
