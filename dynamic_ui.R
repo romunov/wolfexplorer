@@ -174,37 +174,74 @@ observe({
       ) 
     })
   }
-  
-  
+})
+
+# Create data.frame which maps color to sample type level
+colors.df <- reactive({
+  if (!exists("colors.df()", inherits = TRUE) & nrow(allData()) > 0) {
+    st <- levels(allData()$sample_type)
+    data.frame(sample_type_levels = st,
+               sample_type_colors = brewer.pal(n = length(st), name = "Set1"),
+               ui_name = sprintf("ui_%s", gsub(" ", "_", tolower(st))),
+               stringsAsFactors = FALSE)
+  } else {
+    colors.df()
+  }
 })
 
 observe({
   # try to find data for colors. if not found, create one
   # storage of this should be ported to a database at one point
   if (nrow(allData()) > 0) {
-    st <- levels(allData()$sample_type)
-    
-    if (!exists("color.df", inherits = TRUE)) {
-      colors.df <- data.frame(sample_type_levels = st,
-                              sample_type_colors = brewer.pal(n = length(st), name = "Set1"))
-    }
-    
     # now that colors.df surely exists somewhere, let's construct a settings page from
     # all sample types
-    pal <- colorFactor(palette = colors.df$sample_type_colors, 
-                       levels = colors.df$sample_type_levels, ordered = TRUE)
-    colors.df$ui_name <- sprintf("ui_%s", gsub(" ", "_", tolower(colors.df$sample_type_levels)))
+    output$settings_colors <- renderUI({
+      tabs <- lapply(colors.df()$ui_name, FUN = function(x, cldf) {
+        print(sprintf("%s: %s", x, cldf[cldf$ui_name == x, "sample_type_colors"]))
+        colourInput(inputId = x,
+                    label = cldf[cldf$ui_name == x, "sample_type_levels"],
+                    value = cldf[cldf$ui_name == x, "sample_type_colors"],
+                    palette = "limited")
+      }, cldf = colors.df())
+      
+      # DAFUQ, why won't this show in the final result?!
+      tabs
+      
+      # tabs <- list(colourInput(inputId = "ui_blood", label = "blood", value = "#E41A1C"),
+      #      colourInput(inputId = "ui_decomposing_tissue", label = "deco", value = "#377EB8"))
+      # print(tabs)
+      # tabs
+    })
+  } else {
+    output$settings_colors <- renderUI({ p("Please upload sample data first.") })
   }
-  
-  output$settings <- renderUI({
-    # tabs <- lapply(FUN = function(x, cldf) {
-    #   colourInput(inputId = x, label = )
-    # })
-    # do.call(tabBox, c(tabs, title = tagList(shiny::icon("gear"), "tabBox status")))
-    # tabPanel(title = "Legend colors",
-    # colorInput
-    # id = "tab_colorpicker", title = "Settings"
-    # )
-    # )
-  })
 })
+
+# if a new color is picked, update the data.frame
+# observe({
+#   if (nrow(allData()) > 0) {
+#     
+#     # print(input$ui_blood)
+#     # print(input$ui_decomposing_tissue)
+#     # print(input$ui_direct_saliva)
+#     # print(input$ui_hair)
+#     # print(input$ui_saliva)
+#     # print(input$ui_scat)
+#     # print(input$ui_tissue)
+#     # print(input$ui_urine)
+#     
+#     # print("pred spremembo")
+#     # print(colors.df())
+#     # for (i in colors.df()$ui_name) {
+#     #   # print(sprintf("working with %s", colors.df[colors.df$ui_name == i, "sample_type_levels"]))
+#     #   current.color <- as.character(colors.df()[colors.df()$ui_name == i, "sample_type_colors"])
+#     #   new.color <- as.character(input[[i]])
+#     #   
+#     #   # if colors do not match, update old color with new color
+#     #   if (length(new.color) > 0 & !is.null(new.color)) {
+#     #     print(sprintf("color changed for %s", i))
+#     #     colors.df()[colors.df()$ui_name == i, "sample_type_colors"] <- new.color
+#     #   }
+#     # }
+#   }
+# })

@@ -82,14 +82,10 @@ body <- dashboardBody(
     ),
     tabItem(tabName = "settings",
             fluidRow(
-            tabBox(side = "left", selected = "Colors",
-                   width = 12,
-                   tabPanel("General", "some general text"),
-                   tabPanel("Colors",
-                            colourInput("col1", "Sample type 1", "red", palette = "limited"),
-                            colourInput("col2", "Sample type 2", "green", palette = "limited"),
-                            colourInput("col3", "Sample type 3", "blue", palette = "limited"))
-            )
+              tabBox(side = "left", selected = "Color settings", width = 12,
+                     tabPanel("General", "some general text"),
+                     tabPanel("Color settings", uiOutput("settings_colors"))
+              )
             )
     )
   )
