@@ -196,21 +196,29 @@ observe({
     # now that colors.df surely exists somewhere, let's construct a settings page from
     # all sample types
     output$settings_colors <- renderUI({
-      tabs <- lapply(colors.df()$ui_name, FUN = function(x, cldf) {
-        print(sprintf("%s: %s", x, cldf[cldf$ui_name == x, "sample_type_colors"]))
-        colourInput(inputId = x,
-                    label = cldf[cldf$ui_name == x, "sample_type_levels"],
-                    value = cldf[cldf$ui_name == x, "sample_type_colors"],
-                    palette = "limited")
-      }, cldf = colors.df())
-      
-      # DAFUQ, why won't this show in the final result?!
+      if (FALSE) {
+        tabs <- lapply(colors.df()$ui_name, FUN = function(x, cldf) {
+          print(sprintf("%s: %s", x, cldf[cldf$ui_name == x, "sample_type_colors"]))
+          colourInput(inputId = x,
+                      label = cldf[cldf$ui_name == x, "sample_type_levels"],
+                      value = cldf[cldf$ui_name == x, "sample_type_colors"],
+                      palette = "limited")
+        }, cldf = colors.df())
+        
+        # DAFUQ, why won't this show in the final result?!
+        print(tabs)
+        print(names(tabs))
+        print(str(tabs))
+        tabs
+      } else {
+        
+      tabs <- list(colourInput(inputId = "ui_blood", label = "Blood", value = "#E41A1C"),
+                   colourInput(inputId = "ui_decomposing_tissue", label = "Decomposing tissue", value = "#377EB8"))
+      print(tabs)
+      print(names(tabs))
+      print(str(tabs))
       tabs
-      
-      # tabs <- list(colourInput(inputId = "ui_blood", label = "blood", value = "#E41A1C"),
-      #      colourInput(inputId = "ui_decomposing_tissue", label = "deco", value = "#377EB8"))
-      # print(tabs)
-      # tabs
+      }
     })
   } else {
     output$settings_colors <- renderUI({ p("Please upload sample data first.") })
