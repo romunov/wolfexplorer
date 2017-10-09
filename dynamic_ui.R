@@ -177,48 +177,34 @@ observe({
 })
 
 # Create data.frame which maps color to sample type level
-colors.df <- reactive({
-  if (!exists("colors.df()", inherits = TRUE) & nrow(allData()) > 0) {
+colors.df <- reactiveValues()
+colors.df$mapping <- data.frame(sample_type_levels = numeric(0),
+                                sample_type_colors = numeric(0),
+                                ui_name = numeric(0), stringsAsFactors = FALSE)
+observe({
+  if (nrow(colors.df$mapping) == 0 & nrow(allData()) > 0) {
     st <- levels(allData()$sample_type)
-    data.frame(sample_type_levels = st,
-               sample_type_colors = brewer.pal(n = length(st), name = "Set1"),
-               ui_name = sprintf("ui_%s", gsub(" ", "_", tolower(st))),
-               stringsAsFactors = FALSE)
-  } else {
-    colors.df()
-  }
+    colors.df$mapping <- data.frame(sample_type_levels = st,
+                                    sample_type_colors = brewer.pal(n = length(st), name = "Set1"),
+                                    ui_name = sprintf("ui_%s", gsub(" ", "_", tolower(st))),
+                                    stringsAsFactors = FALSE)
+  } 
 })
 
+# Create a settings menu for colors
 observe({
-  # try to find data for colors. if not found, create one
-  # storage of this should be ported to a database at one point
   if (nrow(allData()) > 0) {
-    # now that colors.df surely exists somewhere, let's construct a settings page from
-    # all sample types
     output$settings_colors <- renderUI({
-      if (FALSE) {
-        tabs <- lapply(colors.df()$ui_name, FUN = function(x, cldf) {
-          print(sprintf("%s: %s", x, cldf[cldf$ui_name == x, "sample_type_colors"]))
-          colourInput(inputId = x,
-                      label = cldf[cldf$ui_name == x, "sample_type_levels"],
-                      value = cldf[cldf$ui_name == x, "sample_type_colors"],
-                      palette = "limited")
-        }, cldf = colors.df())
-        
-        # DAFUQ, why won't this show in the final result?!
-        print(tabs)
-        print(names(tabs))
-        print(str(tabs))
-        tabs
-      } else {
-        
-      tabs <- list(colourInput(inputId = "ui_blood", label = "Blood", value = "#E41A1C"),
-                   colourInput(inputId = "ui_decomposing_tissue", label = "Decomposing tissue", value = "#377EB8"))
-      print(tabs)
-      print(names(tabs))
-      print(str(tabs))
+      mapping <- colors.df$mapping
+      mapping <- split(mapping, f = 1:nrow(mapping))
+      
+      tabs <- sapply(mapping, FUN = function(x) {
+        colourInput(inputId = x["ui_name"],
+                    label = x["sample_type_levels"],
+                    value = x["sample_type_colors"],
+                    palette = "square")
+      }, simplify = FALSE)
       tabs
-      }
     })
   } else {
     output$settings_colors <- renderUI({ p("Please upload sample data first.") })
@@ -226,30 +212,18 @@ observe({
 })
 
 # if a new color is picked, update the data.frame
-# observe({
-#   if (nrow(allData()) > 0) {
-#     
-#     # print(input$ui_blood)
-#     # print(input$ui_decomposing_tissue)
-#     # print(input$ui_direct_saliva)
-#     # print(input$ui_hair)
-#     # print(input$ui_saliva)
-#     # print(input$ui_scat)
-#     # print(input$ui_tissue)
-#     # print(input$ui_urine)
-#     
-#     # print("pred spremembo")
-#     # print(colors.df())
-#     # for (i in colors.df()$ui_name) {
-#     #   # print(sprintf("working with %s", colors.df[colors.df$ui_name == i, "sample_type_levels"]))
-#     #   current.color <- as.character(colors.df()[colors.df()$ui_name == i, "sample_type_colors"])
-#     #   new.color <- as.character(input[[i]])
-#     #   
-#     #   # if colors do not match, update old color with new color
-#     #   if (length(new.color) > 0 & !is.null(new.color)) {
-#     #     print(sprintf("color changed for %s", i))
-#     #     colors.df()[colors.df()$ui_name == i, "sample_type_colors"] <- new.color
-#     #   }
-#     # }
-#   }
-# })
+observe({
+  if (nrow(allData()) > 0) {
+    for (i in colors.df$mapping$ui_name) {
+      # print(sprintf("working with %s", colors.df[colors.df$ui_name == i, "sample_type_levels"]))
+      new.color <- input[[i]]
+      if (!is.null(new.color)) {
+        current.color <- as.character(colors.df$mapping[colors.df$mapping$ui_name == i, "sample_type_colors"])
+        if (new.color != current.color) {
+          # if colors do not match, update old color with new color
+          colors.df$mapping[colors.df$mapping$ui_name == i, "sample_type_colors"] <- new.color
+        }
+      }
+    }
+  }
+})

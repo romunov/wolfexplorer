@@ -26,8 +26,9 @@ observe({
   if (nrow(xy) > 0) {
     # Create custom palette based on all samples. This should prevent the legend
     # from changing if subset should not contain all levels.
-    custom.colors <- brewer.pal(n = length(levels(picks$sample_type)), name = "Set1")
-    pal <- colorFactor(palette = custom.colors, levels = levels(picks$sample_type), ordered = TRUE)
+    pal <- colorFactor(palette = colors.df$mapping$sample_type_colors,
+                       levels = colors.df$mapping$sample_type_levels,
+                       ordered = TRUE)
     
     # Add "baselayer"
     outmap <- leafletProxy("map") %>% 
