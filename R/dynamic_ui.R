@@ -12,3 +12,6 @@ source("./R/ui_render_statistics.R", local = TRUE)
 
 # Render Settings > Colors.
 source("./R/ui_render_settings_colors.R", local = TRUE)
+
+# Render How-to
+source("./R/ui_render_howto.R", local = TRUE)
