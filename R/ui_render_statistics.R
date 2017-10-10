@@ -22,12 +22,12 @@ observe({
   
   output$stats <- renderUI({
     fluidRow(
-      infoBox(title = "Animals", value = ani, icon = icon("paw"), color = "olive", width = 2),
-      infoBox(title = "Males", value = male, icon = icon("mars"), color = "light-blue", width = 2),
-      infoBox(title = "Females", value = female, icon = icon("venus"), color = "maroon", width = 2),
-      infoBox(title = "Samples", value = sam, icon = icon("flask"), color = "yellow", width = 2),
-      infoBox(title = "Clusters", value = clusters, icon = icon("cubes"), color = "red", width = 2),
-      infoBox(title = "Date range", value = daterange, icon = icon("calendar"), color = "purple", width = 2)
+      infoBox(title = "Animals", value = ani, icon = icon("paw"), color = "olive", width = 4),
+      infoBox(title = "Males", value = male, icon = icon("mars"), color = "light-blue", width = 4),
+      infoBox(title = "Females", value = female, icon = icon("venus"), color = "maroon", width = 4),
+      infoBox(title = "Samples", value = sam, icon = icon("flask"), color = "yellow", width = 4),
+      infoBox(title = "Clusters", value = clusters, icon = icon("cubes"), color = "red", width = 4),
+      infoBox(title = "Date range", value = daterange, icon = icon("calendar"), color = "purple", width = 4)
     )
   })
 })
