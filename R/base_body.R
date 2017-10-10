@@ -43,7 +43,6 @@ body <- dashboardBody(
     ),
     tabItem(tabName = "overview",
             uiOutput("stats"),
-            br(),
             fluidRow(
             uiOutput("table_samples"),
             uiOutput("table_offs"),

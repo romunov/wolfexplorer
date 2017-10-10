@@ -46,7 +46,7 @@ observe({
   clust <- data.frame(count(par, "cluster"))
   
   
-  if (nrow(xy) > 0) {
+  if (nrow(allData()) > 0) {
     output$sps <- renderDataTable({
      sam_typ
       colnames(sam_typ) <- c("Sample type", "Count")
