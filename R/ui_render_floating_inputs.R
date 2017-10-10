@@ -20,7 +20,7 @@ observe({
 observe({
   if (nrow(allData()) > 0) {
     output$animals <- renderUI({
-      xy <- allData()
+      xy <- fData()
       selectInput("animals", "Select Animal", multiple = TRUE, choices = unique(xy$animal)) })
   } else {
     output$animals <- renderUI({ NULL })
