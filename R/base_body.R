@@ -52,6 +52,10 @@ body <- dashboardBody(
                      tabPanel("Color settings", uiOutput("settings_colors"))
               )
             )
-    )
+    ),
+    tabItem(tabName = "howto",
+            fluidPage(
+            uiOutput("howto"))
+            )
   )
 )
