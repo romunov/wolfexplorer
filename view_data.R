@@ -2,7 +2,8 @@ output$uploadSampleData <- renderDataTable({
   x <- inputFileSamples()
   DT::datatable(data = x[, !grepl("^id$", colnames(x))], 
                 filter = "top", 
-                options = list(pageLength = 15), 
+                extensions = 'Buttons',
+                options = list(pageLength = 15, dom = 'Bfrtip', buttons = I('colvis')),
                 selection = 'single',
                 rownames = FALSE)
 })
@@ -22,7 +23,8 @@ output$uploadParentageData <- renderDataTable({
   x <- inputFileParentage()
   DT::datatable(data = x, 
                 filter = "top", 
-                options = list(pageLength = 15),
+                extensions = 'Buttons',
+                options = list(pageLength = 15, dom = 'Bfrtip', buttons = I('colvis')),
                 rownames = FALSE)
 })
 
