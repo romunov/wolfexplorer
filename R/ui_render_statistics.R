@@ -50,7 +50,7 @@ observe({
     output$sps <- renderDataTable({
      sam_typ
       colnames(sam_typ) <- c("Sample type", "Count")
-      DT::datatable(sam_typ)
+      DT::datatable(sam_typ, rownames = FALSE)
     })
     
     output$table_samples <- renderUI({
@@ -63,13 +63,13 @@ observe({
     output$opp <- renderDataTable({
       offs
       colnames(offs) <- c("Animal", "Offspring count")
-      DT::datatable(offs)
+      DT::datatable(offs, rownames = FALSE)
     })
     
     output$clust <- renderDataTable({
       clust
       colnames(clust) <- c("Cluster", "Animal count")
-      DT::datatable(clust)
+      DT::datatable(clust, rownames = FALSE)
     })
     
     output$table_offs <- renderUI({
