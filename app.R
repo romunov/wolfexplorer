@@ -8,7 +8,8 @@ library(rgdal)
 library(data.table)
 library(ggplot2)
 library(colourpicker)
-library(knitr)
+library(tidyr)
+library(plyr)
 
 source("./R/functions.R")
 
