@@ -2,7 +2,9 @@
 Explorer designed to visualize complex multi-year multi-specimen data. Case study of (Slovenian) wolves.
 
 ### Limitations
-This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing the future.
+This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
+
+WARNING: Date slider and some other features may not be working perfectly in some browsers (I'm looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers.
 
 # How to run this application
 ## The easy way
