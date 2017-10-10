@@ -14,7 +14,8 @@ shiny::runGitHub(repo = "wolfexplorer", username = "romunov")
 
 `*` you can install packages listed in the [`app.R`](https://github.com/romunov/wolfexplorer/blob/master/app.R#L1) using something along the lines of
 ```r
-install.packages(c("shiny", "shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table"))
+install.packages(c("shiny", "shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table",
+                   "ggplot2", "colourpicker", "knitr"))
 ```
 
 ## The manual way
