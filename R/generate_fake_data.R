@@ -38,5 +38,5 @@ offspring <- data.frame(sibling = sprintf("%.3d", 5:NIND),
                         father = c("003", "004"),
                         cluster = c("1", "2"))
 
-write.table(x = xy, file = "data.csv", sep = ",", row.names = FALSE, quote = FALSE)
-write.table(x = offspring, file = "offspring.csv", sep = ",", row.names = FALSE, quote = FALSE)
+write.table(x = xy, file = "./data/samples.csv", sep = ",", row.names = FALSE, quote = FALSE)
+write.table(x = offspring, file = "./data/offspring.csv", sep = ",", row.names = FALSE, quote = FALSE)
