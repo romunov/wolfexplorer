@@ -1,7 +1,7 @@
 # Statistics page
 observe({
   xy <- fData()
-  df <- na.omit(xy[unique(xy$animal), ])
+  df <- xy[!duplicated(xy$animal), ]
   par <- inputFileParentage()
   
   if(nrow(xy) > 0) {
@@ -34,7 +34,7 @@ observe({
 
 observe({
   xy <- fData()
-  xy <- read.csv("data/samples_data_wolves_slo.txt", colClasses = "character")
+  # xy <- read.csv("data/samples_data_wolves_slo.txt", colClasses = "character")
   sam_typ <- data.frame(table(xy$sample_type))
   par <- inputFileParentage()
   par.t <- gather(par, -offspring, key = parent, value = value)
