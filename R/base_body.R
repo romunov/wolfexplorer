@@ -15,7 +15,8 @@ body <- dashboardBody(
                               uiOutput("comment"),
                               uiOutput("sliderDate"),
                               uiOutput("animals"),
-                              uiOutput("offspring")
+                              uiOutput("offspring"),
+                              uiOutput("mcp")
                 )
             )
     ),

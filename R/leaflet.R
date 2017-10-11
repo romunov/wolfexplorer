@@ -9,3 +9,6 @@ source("./R/map_add_offspring_markers.R", local = TRUE)
 
 # Add markers and lines for selected offspring to map
 source("./R/map_add_muerte_markers.R", local = TRUE)
+
+# Add MCP for selected animals
+source("./R/map_add_mcp.R", local = TRUE)

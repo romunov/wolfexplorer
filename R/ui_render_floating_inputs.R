@@ -28,6 +28,15 @@ observe({
 })
 
 observe({
+  if (nrow(wolfPicks()) > 0) {
+    output$mcp <- renderUI({
+      checkboxInput(inputId = "mcp", label = "Show MCP", value = FALSE) })
+  } else {
+    output$mcp <- renderUI({ NULL })
+  }
+})
+
+observe({
   if (nrow(allData()) == 0) {
     output$sliderDate <- renderUI({ NULL })
   } else {
