@@ -1,21 +1,21 @@
 observe({
   if (nrow(allData()) > 0) {
     mcpIn <- input$mcp
-    print(mcpIn)
     if (is.null(mcpIn)) { NULL }
     if (isTRUE(mcpIn)) {
       offInput <- input$offspring
       parent <- wolfPicks()
       offspring <- fOffs()[fOffs()$animal %in% offInput, ]
-      
       xy <- do.call(rbind, list(parent, offspring))
+      print(xy)
+      ani.list <- split(xy, f = xy$animal)
+      print(ani.list[[1]])
+      mcp <- sapply(ani.list, FUN = calChull, simplify = FALSE)
+      print(mcp[[1]])
+      mcp <- SpatialPolygons(lapply(mcp, function(x){x@polygons[[1]]}))
       
-      mcp <- xy[chull(xy$lng, xy$lat), ]
-      print(mcp)
       leafletProxy(mapId = "map") %>%
         addPolygons(data = mcp, 
-                    lat = ~lat, 
-                    lng = ~lng, 
                     fill = TRUE, 
                     stroke = FALSE,
                     fillColor = "yellow", 

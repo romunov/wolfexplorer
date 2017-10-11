@@ -90,3 +90,37 @@ dropdownMenuCustom <- function (..., type = c("messages", "notifications", "task
     )
   )
 }
+
+#' Function computes the subset of points which lie on the convex hull of the 
+#' set of points specified. If there is only one point, it creates a buffer 
+#' around it. If there are two points it creates an ellipse buffer based on 
+#' line connecting those points. If there are three or more points it 
+#' creates a standard mcp polygon.
+calChull <- function(x) {
+  print(nrow(x))
+  if (nrow(x) == 1) {
+    coordinates(x) <- ~ lat + lng
+    point <- SpatialPoints(x)
+    mcp <- gBuffer(point, width = 10)
+    mcp
+  }
+  
+  if (nrow(x) == 2) {
+    x <- data.frame(lat = c(1,7), lng = c(4,13))
+    coordinates(x) <- ~ lat + lng
+    line <- Line(x)
+    lines <- Lines(slinelist = list(line), ID = "1")
+    s.line <- SpatialLines(LinesList = list(lines))
+    mcp <- gBuffer(s.line, width = 10)
+    mcp
+  }
+  
+  if (nrow(x) > 2) {
+    mcp <- x[chull(x$lng, x$lat), ]
+    mcp
+  }
+  
+  if (nrow(x) == 0) {
+    return (NULL)
+  }
+}
