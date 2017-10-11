@@ -88,3 +88,7 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 ![](./img/selected_all.png)
 
 Sliders in the sidebar should aid in visualizing overlapping points/lines.
+
+See menu `Summary` for information on the dataset. If you filter samples by date, summary will be calculated on that subset.
+
+![](./img/summary.png)
