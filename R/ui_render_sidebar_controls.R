@@ -44,3 +44,16 @@ observe({
     })
   }
 })
+
+observe({
+  if (any(is.null(input$mcp), input$mcp == FALSE)) {
+    output$mcp_opacity <- renderUI({
+      NULL    
+    })
+  } else {
+    output$mcp_opacity <- renderUI({
+      sliderInput("mcp_opacity", "MCP opacity", min = 0, max = 1,
+                  value = 0.2, step = 0.1, dragRange = FALSE)
+    })
+  }
+})

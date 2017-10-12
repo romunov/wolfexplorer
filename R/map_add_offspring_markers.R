@@ -21,7 +21,7 @@ observe({
                               data = off[off$animal == i, ],
                               color = "#fdc086", 
                               opacity = input$offspring_opacity, 
-                              weight = 1, 
+                              weight = 0.5, 
                               group = "sibLines")
     }
     # Add points

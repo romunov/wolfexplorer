@@ -8,6 +8,7 @@ sidebar <- dashboardSidebar(
     br(),
     uiOutput("parent_opacity"),
     uiOutput("offspring_opacity"),
+    uiOutput("mcp_opacity"),
     uiOutput("dotSize"),
     uiOutput("mortality")
   )

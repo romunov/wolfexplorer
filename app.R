@@ -10,6 +10,7 @@ library(ggplot2)
 library(colourpicker)
 library(tidyr)
 library(plyr)
+library(rgeos)
 
 source("./R/functions.R")
 

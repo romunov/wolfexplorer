@@ -15,6 +15,7 @@ observe({
                              ordered = TRUE)
     
     # Add "baselayer"
+    print(populatePopup(xy))
     outmap <- leafletProxy("map") %>% 
       clearMarkers() %>%
       clearShapes() %>%
@@ -38,7 +39,7 @@ observe({
                                data = picks[picks$animal == i, ],
                                color = "black", 
                                opacity = input$parent_opacity, 
-                               weight = 1)
+                               weight = 0.5)
       }
       # Add markers
       outmap %>%

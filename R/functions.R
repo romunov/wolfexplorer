@@ -27,7 +27,6 @@ GKtoWGS <- function(df) {
   }
 }
 
-
 #' Create popup for samples.
 populatePopup <- function(x) {
   out <- sprintf("<dl>
@@ -40,6 +39,19 @@ populatePopup <- function(x) {
                  x$date,
                  x$sex,
                  x$sample_type)
+  out
+}
+
+populatePolygonPopup <- function(x) {
+  out <- sprintf("<dl>
+                   <dt>animal: %s</dt>
+                   <dt>date range: %s %s</dt>
+                   <dt>sex: %s</dt>
+                 </dl>",
+                 unique(x$animal),
+                 min(x$date),
+                 max(x$date),
+                 unique(x$sex))
   out
 }
 
@@ -97,30 +109,40 @@ dropdownMenuCustom <- function (..., type = c("messages", "notifications", "task
 #' line connecting those points. If there are three or more points it 
 #' creates a standard mcp polygon.
 calChull <- function(x) {
-  print(nrow(x))
   if (nrow(x) == 1) {
-    coordinates(x) <- ~ lat + lng
+    coordinates(x) <- ~ lng + lat
     point <- SpatialPoints(x)
-    mcp <- gBuffer(point, width = 10)
-    mcp
+    
+    # convert to UTM to have buffer in sensible units
+    initcrs <- CRS("+init=epsg:4326")
+    proj4string(point) <- initcrs
+    point <- spTransform(point, CRSobj = CRS("+init=epsg:3912"))
+    mcp <- gBuffer(point, width = 1000) # buffer of 1 km
+    mcp <- spTransform(mcp, CRSobj = initcrs)
+    return(mcp)
   }
   
   if (nrow(x) == 2) {
-    x <- data.frame(lat = c(1,7), lng = c(4,13))
-    coordinates(x) <- ~ lat + lng
+    initcrs <- CRS("+init=epsg:4326")
+    
+    coordinates(x) <- ~ lng + lat
     line <- Line(x)
     lines <- Lines(slinelist = list(line), ID = "1")
     s.line <- SpatialLines(LinesList = list(lines))
-    mcp <- gBuffer(s.line, width = 10)
-    mcp
+    
+    # convert to UTM to have buffer in sensible units
+    proj4string(s.line) <- initcrs
+    s.line <- spTransform(s.line, CRSobj = CRS("+init=epsg:3912"))
+    mcp <- gBuffer(s.line, width = 1000) # buffer of 1 km
+    mcp <- spTransform(mcp, CRSobj = initcrs)
+    
+    return(mcp)
   }
   
   if (nrow(x) > 2) {
     mcp <- x[chull(x$lng, x$lat), ]
-    mcp
-  }
-  
-  if (nrow(x) == 0) {
-    return (NULL)
+    coordinates(mcp) <- ~ lng + lat
+    suppressWarnings(mcp <- SpatialPolygons(list(Polygons(list(Polygon(mcp)), ID = 1))))
+    return(mcp)
   }
 }
