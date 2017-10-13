@@ -29,12 +29,10 @@ GKtoWGS <- function(df) {
 
 #' Create popup for samples.
 populatePopup <- function(x) {
-  out <- sprintf("<dl>
-                   <dt>animal: %s</dt>
-                   <dt>date: %s</dt>
-                   <dt>sex: %s</dt>
-                   <dt>sample type: %s</dt>
-                 </dl>",
+  out <- sprintf("<dt>Animal: %s</dt>
+                   <dt>Date: %s</dt>
+                   <dt>Sex: %s</dt>
+                   <dt>Sample type: %s</dt>",
                  x$animal,
                  x$date,
                  x$sex,
@@ -43,15 +41,19 @@ populatePopup <- function(x) {
 }
 
 populatePolygonPopup <- function(x) {
-  out <- sprintf("<dl>
-                   <dt>animal: %s</dt>
-                   <dt>date range: %s %s</dt>
-                   <dt>sex: %s</dt>
-                 </dl>",
+  out <- htmltools::HTML(sprintf("
+                   <dt>Animal: %s</dt>
+                   <dt>First record: %s</dt>
+                   <dt>Last record: %s</dt>
+                   <dt>Sex: %s</dt>
+                   <dt>Num. of samples: %s</dt>",
                  unique(x$animal),
                  min(x$date),
                  max(x$date),
-                 unique(x$sex))
+                 unique(x$sex),
+                 nrow(x)
+                 )
+  )
   out
 }
 

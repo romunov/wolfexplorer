@@ -32,13 +32,10 @@ observe({
         spChFIDs(mcp[[i]], nms[i])
       }, mcp = mcp, nms = nms)
       
-      # xy.popup <- sapply(ani.list, FUN = function(x) {populatePolygonPopup(x)}, simplify = FALSE)
-      # poly.popup <- data.frame(popup = unlist(xy.popup),
-      #            stringsAsFactors = FALSE)
-      
+      xy.popup <- lapply(ani.list, FUN = populatePolygonPopup)
+      xy.popup <- unname(xy.popup)
+    
       mcp <- SpatialPolygons(lapply(mcp, function(x) {x@polygons[[1]]}))
-      
-      # mcp <- SpatialPolygonsDataFrame(mcp, data = poly.popup)
       
       pal <- colorFactor(palette = c("#d7191c", "#2c7bb6"),
                          levels = c("parent", "offspring"),
@@ -59,7 +56,8 @@ observe({
                     highlightOptions = highlightOptions(color = "white", weight = 2,
                                                         stroke = TRUE,
                                                         bringToFront = TRUE),
-                    # popup = poly.popup,
+                    popup = xy.popup,
+                    # label = xy.popup,
                     group = "mcp")
     } else {
       leafletProxy(mapId = "map") %>% 
