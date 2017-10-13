@@ -15,7 +15,6 @@ observe({
                              ordered = TRUE)
     
     # Add "baselayer"
-    print(populatePopup(xy))
     outmap <- leafletProxy("map") %>% 
       clearMarkers() %>%
       clearShapes() %>%

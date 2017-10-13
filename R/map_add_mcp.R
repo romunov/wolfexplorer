@@ -26,12 +26,19 @@ observe({
       ani.list <- split(xy, f = droplevels(xy$animal))
       mcp <- sapply(ani.list, FUN = calChull, simplify = FALSE)
       
-      # renumber IDs: https://gis.stackexchange.com/a/234030
-      mcp <- lapply(1:length(mcp), function(i, mcp) {
-        spChFIDs(mcp[[i]], paste0(as.character(i), '.', 1:length(mcp[[i]])))
-      }, mcp = mcp)
+      # renumber IDs, modified from https://gis.stackexchange.com/a/234030
+      nms <- names(ani.list)
+      mcp <- lapply(1:length(mcp), function(i, mcp, nms) {
+        spChFIDs(mcp[[i]], nms[i])
+      }, mcp = mcp, nms = nms)
+      
+      # xy.popup <- sapply(ani.list, FUN = function(x) {populatePolygonPopup(x)}, simplify = FALSE)
+      # poly.popup <- data.frame(popup = unlist(xy.popup),
+      #            stringsAsFactors = FALSE)
       
       mcp <- SpatialPolygons(lapply(mcp, function(x) {x@polygons[[1]]}))
+      
+      # mcp <- SpatialPolygonsDataFrame(mcp, data = poly.popup)
       
       pal <- colorFactor(palette = c("#d7191c", "#2c7bb6"),
                          levels = c("parent", "offspring"),
@@ -39,11 +46,9 @@ observe({
       
       # find unique class of polygons - which corresponds to list element in xy
       xy.class <- sapply(ani.list, FUN = function(x) {unique(x$class)})
-      xy.popup <- sapply(ani.list, FUN = function(x) {populatePolygonPopup(x)}, simplify = FALSE)
       
       leafletProxy(mapId = "map") %>%
         clearGroup(group = "mcp") %>%
-        
         addPolygons(data = mcp, 
                     stroke = TRUE,
                     color = "black",
@@ -54,7 +59,7 @@ observe({
                     highlightOptions = highlightOptions(color = "white", weight = 2,
                                                         stroke = TRUE,
                                                         bringToFront = TRUE),
-                    popup = xy.popup,
+                    # popup = poly.popup,
                     group = "mcp")
     } else {
       leafletProxy(mapId = "map") %>% 
