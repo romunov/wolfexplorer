@@ -11,6 +11,7 @@ library(colourpicker)
 library(tidyr)
 library(plyr)
 library(rgeos)
+library(htmltools)
 
 source("./R/functions.R")
 
