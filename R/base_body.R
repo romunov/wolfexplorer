@@ -53,7 +53,7 @@ body <- dashboardBody(
     tabItem(tabName = "settings",
             fluidRow(
               tabBox(side = "left", selected = "Color settings", width = 12,
-                     tabPanel("General", "some general text"),
+                     tabPanel("General", "Not implemented yet."),
                      tabPanel("Color settings", uiOutput("settings_colors"))
               )
             )

@@ -4,7 +4,7 @@ Explorer designed to visualize complex multi-year multi-specimen data. Case stud
 ### Limitations
 This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
 
-WARNING: Date slider and some other features may not be working perfectly in some browsers (I'm looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers.
+WARNING: Date slider and some other features may not be working perfectly in some browsers (I'm looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testsing has been done on Firefox.
 
 # How to run this application
 ## The easy way
@@ -87,8 +87,17 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 
 ![](./img/selected_all.png)
 
+You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. For three points or more, a MCP as one would expect is created.
+
+![](./img/mcp.png)
+
 Sliders in the sidebar should aid in visualizing overlapping points/lines.
 
 See menu `Summary` for information on the dataset. If you filter samples by date, summary will be calculated on that subset.
 
 ![](./img/summary.png)
+
+Legend colors can be manipulated through the `Settings` menu. Click on the input tab of the color and pick a color, any color.
+
+![](./img/color_setting.png)
+
