@@ -17,7 +17,7 @@ shiny::runGitHub(repo = "wolfexplorer", username = "romunov")
 `*` you can install packages listed in the [`app.R`](https://github.com/romunov/wolfexplorer/blob/master/app.R#L1) using something along the lines of
 ```r
 install.packages(c("shiny", "shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table",
-                   "ggplot2", "colourpicker", "knitr", "plyr"))
+                   "ggplot2", "colourpicker", "knitr", "plyr", "tidyr"))
 ```
 
 ## The manual way
@@ -88,3 +88,7 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 ![](./img/selected_all.png)
 
 Sliders in the sidebar should aid in visualizing overlapping points/lines.
+
+See menu `Summary` for information on the dataset. If you filter samples by date, summary will be calculated on that subset.
+
+![](./img/summary.png)
