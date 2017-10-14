@@ -27,35 +27,61 @@ GKtoWGS <- function(df) {
   }
 }
 
+
 #' Create popup for samples.
 populatePopup <- function(x) {
   out <- sprintf("<dt>Animal: %s</dt>
                    <dt>Date: %s</dt>
                    <dt>Sex: %s</dt>
+                   <dt>Known parents: %s</dt>
                    <dt>Sample type: %s</dt>",
                  x$animal,
                  x$date,
                  x$sex,
+                 x$label,
                  x$sample_type)
   out
 }
 
+
+# Create popups for polygons.
 populatePolygonPopup <- function(x) {
   out <- htmltools::HTML(sprintf("
                    <dt>Animal: %s</dt>
                    <dt>First record: %s</dt>
                    <dt>Last record: %s</dt>
                    <dt>Sex: %s</dt>
+                   <dt>Known parents: No data</dt>
                    <dt>Num. of samples: %s</dt>",
-                 unique(x$animal),
-                 min(x$date),
-                 max(x$date),
-                 unique(x$sex),
-                 nrow(x)
-                 )
+                                 unique(x$animal),
+                                 min(x$date),
+                                 max(x$date),
+                                 unique(x$sex),
+                                 nrow(x))
   )
   out
 }
+
+
+# Add parentage information to samples.
+addParentageData <- function(xy, parents) {
+  if (nrow(xy) > 0) {
+    if (nrow(parents) > 0) {
+      parents[parents$mother == "", "mother"] <- "Unknown"
+      parents[parents$father == "", "father"] <- "Unknown"
+      
+      xy <- merge(xy, parents, by.x = "animal", by.y = "offspring")
+      xy$label <- sprintf("M: %s F: %s", xy$mother, xy$father)
+    } else {
+      xy$label <- "M: No data F: No data"
+    }
+  } else {
+    # add an empty column if no animals have been selected yet
+    xy <- cbind(xy, data.frame(label = "")[0, , drop = FALSE]) 
+  }
+  xy
+}
+
 
 #' Set custom dropdown menu text
 customSentence <- function(numItems, type) {
