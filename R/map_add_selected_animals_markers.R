@@ -5,9 +5,18 @@ r.pal$pal <- NULL
 observe({
   PS <- PS()
   xy <- allData()
-  picks <- wolfPicks()
   
   if (nrow(xy) > 0) {
+    # Adds parentage data to sample data if provided.
+    xy <- addParentageData(x = xy, parents = inputFileParentage())
+    
+    # Subset potential animals selected in the selectInput menu.
+    if (length(input$animals) > 0) {
+      picks <- xy[(xy$animal %in% input$animals), ]
+    } else {
+      picks <- xy[0, ]
+    }
+    
     # Create custom palette based on all samples. This should prevent the legend
     # from changing if subset should not contain all levels.
     r.pal$pal <- colorFactor(palette = colors.df$mapping$sample_type_colors,

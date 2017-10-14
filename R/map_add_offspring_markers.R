@@ -2,7 +2,11 @@
 observe({
   PS <- PS()
   offInput <- input$offspring
+  
   off <- fOffs()[fOffs()$animal %in% offInput, ]
+  
+  # Add parentage data if provided.
+  off <- addParentageData(xy = off, parents = inputFileParentage())
   
   out.off <- leafletProxy("map") %>% 
     # Remove all previous points and lines
