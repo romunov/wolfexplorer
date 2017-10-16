@@ -87,7 +87,7 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 
 ![](./img/selected_all.png)
 
-You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. For three points or more, a MCP as one would expect is created.
+You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created.
 
 ![](./img/mcp.png)
 
