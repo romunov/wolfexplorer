@@ -6,15 +6,26 @@ observe({
     
     if (mcpIn) {
       # get data for all selected animals, adult and otherwise
-      offInput <- input$offspring
+      # prepare parents data
       parent <- wolfPicks()
+      xy <- addParentageData(x = parent, parents = inputFileParentage())
+      
+      if (length(input$animals) > 0) {
+        parent <- xy[(xy$animal %in% input$animals), ]
+      } else {
+        parent <- xy[0, ]
+      }
       
       if (nrow(parent) < 1) {
         return(NULL)
       }
+      
       parent$class <- "parent"
       
-      offspring <- fOffs()[fOffs()$animal %in% offInput, ]
+      # prepare offspring data
+      offspring <- fOffs()[fOffs()$animal %in% input$offspring, ]
+      offspring <- addParentageData(x = offspring, parents = inputFileParentage())
+      
       if (nrow(offspring) > 0) {
         offspring$class <- "offspring"
         xy <- do.call(rbind, list(parent, offspring))

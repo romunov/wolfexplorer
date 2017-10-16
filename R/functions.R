@@ -51,12 +51,13 @@ populatePolygonPopup <- function(x) {
                    <dt>First record: %s</dt>
                    <dt>Last record: %s</dt>
                    <dt>Sex: %s</dt>
-                   <dt>Known parents: No data</dt>
+                   <dt>Known parents: %s</dt>
                    <dt>Num. of samples: %s</dt>",
                                  unique(x$animal),
                                  min(x$date),
                                  max(x$date),
                                  unique(x$sex),
+                                 unique(x$label),
                                  nrow(x))
   )
   out
