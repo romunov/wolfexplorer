@@ -71,7 +71,7 @@ addParentageData <- function(xy, parents) {
       parents[parents$mother == "", "mother"] <- "Unknown"
       parents[parents$father == "", "father"] <- "Unknown"
       
-      xy <- merge(xy, parents, by.x = "animal", by.y = "offspring")
+      xy <- merge(xy, parents, by.x = "animal", by.y = "offspring", all.x = TRUE)
       xy$label <- sprintf("M: %s F: %s", xy$mother, xy$father)
     } else {
       xy$label <- "M: No data F: No data"
