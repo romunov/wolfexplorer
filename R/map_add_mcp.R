@@ -56,7 +56,7 @@ observe({
       xy.class <- sapply(ani.list, FUN = function(x) {unique(x$class)})
       
       leafletProxy(mapId = "map") %>%
-        clearGroup(group = "mcp") %>%
+        clearGroup(group = "MCP") %>%
         addPolygons(data = mcp, 
                     stroke = TRUE,
                     color = "black",
@@ -68,11 +68,10 @@ observe({
                                                         stroke = TRUE,
                                                         bringToFront = TRUE),
                     popup = xy.popup,
-                    # label = xy.popup,
-                    group = "mcp")
+                    group = "MCP")
     } else {
       leafletProxy(mapId = "map") %>% 
-        clearGroup(group = "mcp")
+        clearGroup(group = "MCP")
     }
   }
 })

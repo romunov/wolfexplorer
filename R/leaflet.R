@@ -12,3 +12,6 @@ source("./R/map_add_muerte_markers.R", local = TRUE)
 
 # Add MCP for selected animals
 source("./R/map_add_mcp.R", local = TRUE)
+
+# Add layer controls to turn on/off layers.
+source("./R/map_layer_controls.R", local = TRUE)
