@@ -37,6 +37,7 @@ observe({
                        fillOpacity = 0.2, 
                        fillColor = "black", 
                        layerId = paste("allMarkers", xy$id, sep = " "),
+                       group = "All samples",
                        popup = populatePopup(xy)) 
     
     if (nrow(picks) > 0) {
@@ -44,6 +45,7 @@ observe({
       for (i in unique(picks$animal)) {
         outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, 
                                layerId = paste("aniLines", picks$id[picks$animal == i], sep = " "),
+                               group = "Selected animals",
                                data = picks[picks$animal == i, ],
                                color = "black", 
                                opacity = input$parent_opacity, 
@@ -59,6 +61,7 @@ observe({
                          fillColor = ~r.pal$pal(sample_type),
                          fillOpacity = input$parent_opacity, 
                          layerId = paste("aniMarkers", picks$id, sep = " "),
+                         group = "Selected animals",
                          popup = populatePopup(picks)) %>%
         clearControls() %>%
         addLegend("bottomright",

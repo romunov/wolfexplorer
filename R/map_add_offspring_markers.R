@@ -22,11 +22,11 @@ observe({
     for (i in unique(off$animal)) {
       out.off <- addPolylines(map = out.off, lng = ~lng, lat = ~lat, 
                               layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
+                              group = "Offspring",
                               data = off[off$animal == i, ],
                               color = "#fdc086", 
                               opacity = input$offspring_opacity, 
-                              weight = 0.5, 
-                              group = "sibLines")
+                              weight = 0.5)
     }
     # Add points
     out.off %>%
@@ -37,7 +37,7 @@ observe({
                        fillColor = ~r.pal$pal(sample_type),
                        fillOpacity = input$offspring_opacity,
                        layerId = paste("sibMarkers", off$id, sep = " "),
-                       popup = populatePopup(off),
-                       group = "sibMarkers")
+                       group = "Offspring",
+                       popup = populatePopup(off))
   }
 })
