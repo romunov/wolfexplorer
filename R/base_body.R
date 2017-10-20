@@ -1,4 +1,5 @@
 body <- dashboardBody(
+  useShinyjs(),
   tags$style(type = "text/css", "#map {height: 100% !important;}"),
   tabItems(
     tabItem(tabName = "explore",
@@ -13,7 +14,6 @@ body <- dashboardBody(
                               draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                               width = 330, height = "auto",
                               uiOutput("comment"),
-                              uiOutput("failed_load"),
                               uiOutput("sliderDate"),
                               uiOutput("animals"),
                               uiOutput("offspring"),

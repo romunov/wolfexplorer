@@ -1,4 +1,4 @@
-# Menu for rendering notifications in the upper left corner
+# Menu for rendering notifications in the upper right corner
 source("./R/ui_render_notifications.R", local = TRUE)
 
 # Render floating inputs.

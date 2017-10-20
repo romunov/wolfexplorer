@@ -5,21 +5,19 @@ inputFileSamples <- reactive({
   } else {
     # browser()
     x <- tryCatch(fread(x$datapath, 
-               encoding = "UTF-8",
-                  colClasses = c("numeric", "numeric", "character", "character", "character", "character", "character" ),
-               data.table = FALSE),
-             error = function(e) e,
-             warning = function(w) w
+                        encoding = "UTF-8",
+                        colClasses = c("numeric", "numeric", "character", "character", "character", "character", "character" ),
+                        data.table = FALSE),
+                  error = function(e) e,
+                  warning = function(w) w
     )
     
     if (any(class(x) %in% c("simpleWarning", "simpleError"))) {
-      output$failed_load <- renderUI({
-        h4("Input data not formatted properly. Please compare your input file to the specs.")
-      })
+      alert("Input data not formatted properly. Please compare your input file to the specs.")
       x <- data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA)[0, ]
       return(x)
     } else {
-      output$failed_load <- renderUI({ NULL })
+      alert("Data imported successfully!")
     }
     
     validate(
@@ -42,20 +40,18 @@ inputFileParentage <- reactive({
   } else {
     # browser()
     out <- tryCatch(fread(x$datapath, encoding = "UTF-8", 
-          colClasses = c("character", "character", "character", "character"),
-          data.table = FALSE),
-          error = function(e) e,
-          warning = function(w) w
+                          colClasses = c("character", "character", "character", "character"),
+                          data.table = FALSE),
+                    error = function(e) e,
+                    warning = function(w) w
     )
     
     if (any(class(out) %in% c("simpleWarning", "simpleError"))) {
-      output$failed_load <- renderUI({
-        h4("Input data not formatted properly. Please compare your input file to the specs.")
-      })
+      alert("Input data not formatted properly. Please compare your input file to the specs.")
       out <- data.frame(offspring = NA, mother = NA, father = NA, cluster = NA)[0, ]
       return(out)
     } else {
-      output$failed_load <- renderUI({ NULL })
+      alert("Data imported successfully!")
     }
     
     # if column names do not match predefined form, warn user
