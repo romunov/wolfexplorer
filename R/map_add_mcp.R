@@ -1,6 +1,7 @@
 observe({
   if (nrow(allData()) > 0) {
     mcpIn <- input$mcp
+    dmcl <- TRUE
     
     if (is.null(mcpIn)) { return(NULL) }
     
@@ -37,6 +38,11 @@ observe({
       ani.list <- split(xy, f = droplevels(xy$animal))
       mcp <- sapply(ani.list, FUN = calChull, simplify = FALSE)
       
+      if (dmcl) {
+        # This will be needed for connecting centroids of polygons.
+        mcp.centroid <- sapply(mcp, FUN = gCentroid)
+      }
+      
       # renumber IDs, modified from https://gis.stackexchange.com/a/234030
       nms <- names(ani.list)
       mcp <- lapply(1:length(mcp), function(i, mcp, nms) {
@@ -45,7 +51,7 @@ observe({
       
       xy.popup <- lapply(ani.list, FUN = populatePolygonPopup)
       xy.popup <- unname(xy.popup)
-    
+      
       mcp <- SpatialPolygons(lapply(mcp, function(x) {x@polygons[[1]]}))
       
       pal <- colorFactor(palette = c("#d7191c", "#2c7bb6"),
@@ -69,6 +75,32 @@ observe({
                                                         bringToFront = TRUE),
                     popup = xy.popup,
                     group = "MCP")
+      
+      # If selected, connect centroids so that offspring is connected to the parent.
+      cent.parents <- input$animals
+      
+      for (i in cent.parents) {
+        # If parent has any offspring (selected), connect centroids as described above.
+        num.offspring <- xy[xy$mother %in% i | xy$father %in% i, ] # find all offspring for parent i
+        
+        if (nrow(num.offspring) > 0) {
+          cent.i.offspring <- unique(num.offspring$animal) # isolate offspring animals
+          
+          for (j in cent.i.offspring) {
+            if (any(names(mcp.centroid) %in% j)) {
+              con.centroids <- rbind(coordinates(mcp.centroid[[i]]), 
+                                     coordinates(mcp.centroid[[j]]))
+              
+              leafletProxy(mapId = "map") %>%
+                addPolylines(data = con.centroids,
+                             color = "#009900",
+                             weight = 0.75)
+            }
+          }
+        }
+      }
+      
+      
     } else {
       leafletProxy(mapId = "map") %>% 
         clearGroup(group = "MCP")
