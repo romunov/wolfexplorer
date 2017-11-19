@@ -93,8 +93,9 @@ observe({
               
               leafletProxy(mapId = "map") %>%
                 addPolylines(data = con.centroids,
-                             color = "#009900",
-                             weight = 0.75)
+                             color = "#ffff00",
+                             weight = 0.75,
+                             group = "Centroid connections")
             }
           }
         }

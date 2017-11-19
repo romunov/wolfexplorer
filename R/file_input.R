@@ -3,7 +3,6 @@ inputFileSamples <- reactive({
   if (is.null(x)) {
     data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA)[0, ]
   } else {
-    # browser()
     x <- tryCatch(fread(x$datapath, 
                         encoding = "UTF-8",
                         colClasses = c("numeric", "numeric", "character", "character", "character", "character", "character" ),
@@ -38,7 +37,6 @@ inputFileParentage <- reactive({
   if (is.null(x)) {
     data.frame(offspring = NA, mother = NA, father = NA, cluster = NA)[0, ]
   } else {
-    # browser()
     out <- tryCatch(fread(x$datapath, encoding = "UTF-8", 
                           colClasses = c("character", "character", "character", "character"),
                           data.table = FALSE),

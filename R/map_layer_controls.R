@@ -18,6 +18,10 @@ observe({
       lyr <- c(lyr, "Offspring")
     }
     
+    if (!is.null(input$offspring) & length(input$mcp) > 0) {
+      lyr <- c(lyr, "Centroid connections")
+    }
+    
     leafletProxy("map") %>%
       addLayersControl(overlayGroups = lyr, position = "topleft")
   }
