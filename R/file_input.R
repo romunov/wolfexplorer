@@ -15,8 +15,6 @@ inputFileSamples <- reactive({
       alert("Input data not formatted properly. Please compare your input file to the specs.")
       x <- data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA)[0, ]
       return(x)
-    } else {
-      alert("Data imported successfully!")
     }
     
     validate(
@@ -48,9 +46,7 @@ inputFileParentage <- reactive({
       alert("Input data not formatted properly. Please compare your input file to the specs.")
       out <- data.frame(offspring = NA, mother = NA, father = NA, cluster = NA)[0, ]
       return(out)
-    } else {
-      alert("Data imported successfully!")
-    }
+    } 
     
     # if column names do not match predefined form, warn user
     validate(

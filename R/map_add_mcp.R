@@ -60,6 +60,7 @@ observe({
       
       # find unique class of polygons - which corresponds to list element in xy
       xy.class <- sapply(ani.list, FUN = function(x) {unique(x$class)})
+      xy.class <- sapply(xy.class, "[", 1)
       
       leafletProxy(mapId = "map") %>%
         clearGroup(group = "MCP") %>%
