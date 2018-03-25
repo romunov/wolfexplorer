@@ -26,6 +26,8 @@ observeEvent(input$plot.pedigree, {
     plot(pdgr)
   })
   
+  # this answer helped with collapsible panel - https://stackoverflow.com/questions/35175167/collapse-absolutepanel-in-shiny/35175847
+  
   output$pedigree.panel <- renderUI({
     absolutePanel(id = "pedigree", class = "panel panel-default", fixed = TRUE,
                   draggable = FALSE, top = "auto", left = 250, right = "auto", bottom = 15, 
