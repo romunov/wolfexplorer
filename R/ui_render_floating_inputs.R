@@ -36,6 +36,7 @@ observe({
   }
 })
 
+# Display time slider
 observe({
   if (nrow(allData()) == 0) {
     output$sliderDate <- renderUI({ NULL })
@@ -47,7 +48,7 @@ observe({
   }
 })
 
-# If there is some input in input$animal, display this menu
+# Display animals deemed as offspring
 observe({
   picks <- wolfPicks()
   sibs <- fOffs()
@@ -57,5 +58,18 @@ observe({
     output$offspring <- renderUI({
       selectInput("offspring", "Offspring", multiple = TRUE, choices = sibs$animal)
     })
+  }
+})
+
+# If familial/cluster data is available, create a menu which 
+# offers to filters out only animals from selected cluster
+observe({
+  xy <- inputFileParentage()
+  if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
+    output$cluster <- renderUI({
+      selectInput("cluster", "Cluster/Family", multiple = TRUE, choices = sort(unique(xy$cluster)))
+    })
+  } else {
+    output$cluster <- renderUI({NULL})
   }
 })

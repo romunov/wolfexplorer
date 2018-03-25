@@ -15,6 +15,7 @@ body <- dashboardBody(
                               width = 330, height = "auto",
                               uiOutput("comment"),
                               uiOutput("sliderDate"),
+                              uiOutput("cluster"),
                               uiOutput("animals"),
                               uiOutput("offspring"),
                               uiOutput("mcp")

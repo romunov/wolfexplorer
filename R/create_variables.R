@@ -11,6 +11,13 @@ allData <- reactive({
 fData <- reactive({
   xy <- inputFileSamples()
   if (nrow(xy) > 0) {
+    # make available only animals from selected cluster
+    getklus <- getCluster()
+    if (!is.null(getklus)) {
+      xy <- xy[xy$animal %in% getklus, ]
+    }
+    
+    # and select by datum range
     xy[(xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     xy[0, ]
@@ -26,12 +33,12 @@ wolfPicks <- reactive({
   }
 })
 
-mortality <- reactive({  ## A samo za izbrane živali al za vse znotraj daterange?
+mortality <- reactive({
   xy <- allData()
   if (nrow(xy) > 0) {
-	xy[xy$sample_type %in% c("Tissue", "Decomposing tissue"), ]
+    xy[xy$sample_type %in% c("Tissue", "Decomposing tissue"), ]
   } else {
-	xy[0, ]
+    xy[0, ]
   }
 })
 
@@ -40,10 +47,29 @@ fOffs <- reactive({
   xy <- fData()
   x <- unique(wolfPicks()$animal)
   offspring <- inputFileParentage()
+  
   if (nrow(offspring) > 0) {
     offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "offspring"]
     xy[(xy$animal %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     offspring
   }
+})
+
+# Retrieve information about cluster, if offspring (heritage) data exists.
+getCluster <- reactive({
+  if (is.null(input$cluster)) {
+    return(NULL)
+  }
+  
+  kls <- inputFileParentage()
+  
+  # select only entries with animals from selected clusters/families
+  kls <- kls[kls$cluster %in% input$cluster, ]
+  
+  # and return only animal names of animals from selected clusters
+  xy <- allData()
+  
+  out <- xy[xy$animal %in% kls$offspring | xy$animal %in% kls$mother | xy$animal %in% kls$father, ]
+  return(out[, "animal"])
 })
