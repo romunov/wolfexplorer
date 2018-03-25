@@ -175,3 +175,52 @@ calChull <- function(x) {
     return(mcp)
   }
 }
+
+
+#' Function checks that all animals from selected cluster have known parents.
+#' In case of missing parents it fills them with "", which enables kinship2 package
+#' to plot the pedigree. It also adds information about sex and status to the dataset.
+#' @param samples A data.frame with samples data
+#' @param data A data.frame with parentage data
+#' @param cluster Selected cluster
+
+
+fillParentsAndSexAndStatus <- function(samples, data, cluster) {
+  samples$sex <- as.character(samples$sex)
+  # kinship2 needs sex data in that form.
+  samples$sex[samples$sex == "M"] <- "male"
+  samples$sex[samples$sex == "F"] <- "female"
+  samples$sex[samples$sex == ""] <- "unknown"
+  
+  fam <- data[data$cluster == cluster, ] # subset data by cluster
+  
+  members <- na.omit(unique(unlist(fam[ , c("offspring", "father", "mother")]))) # find all cluster members
+  members <- members[nchar(members) > 0]
+  
+  no.parents <- members[!(members %in% fam$offspring)] # find members without known parents
+  print(paste("Found", length(no.parents), "animals without known parents.", sep = " "))
+  
+  # fill empty parents to those members
+  for (i in no.parents) {
+    add.parents <- c(i, "", "", cluster)
+    fam <- rbind(fam, add.parents)
+  }
+  
+  print(paste("Family has", nrow(fam), "members.", sep = " "))
+  
+  # v podatkih o vzorcih poišči podatke o spolu članov družine
+  sex_data <- unique(samples[samples$animal %in% members, c("animal", "sex")])
+  
+  dead_animals <- samples[samples$sample_type %in% c("Decomposing Tissue", "Tissue") & 
+                            samples$animal %in% members, c("animal")]
+  
+  # pridruži podatke o spolu
+  data <- merge(x = fam, y = sex_data, by.x = "offspring", by.y = "animal", all = TRUE)
+  print("Added sex data for all animals.")
+  data$cluster <- cluster
+  
+  data$status <- 0
+  data$status[data$offspring %in% dead_animals] <- 1
+  print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
+  data
+}

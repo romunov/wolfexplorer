@@ -67,9 +67,20 @@ observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
     output$cluster <- renderUI({
-      selectInput("cluster", "Cluster/Family", multiple = TRUE, choices = sort(unique(xy$cluster)))
+      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c("", sort(unique(xy$cluster))))
     })
   } else {
     output$cluster <- renderUI({NULL})
+  }
+})
+
+observe({
+  x <- input$cluster
+  if(length(x) > 0) {
+    output$plot.pedigree <- renderUI({
+      actionButton("plot.pedigree", label = "Plot pedigree" )
+    })
+  } else {
+    output$plot.pedigree <- renderUI({NULL})
   }
 })
