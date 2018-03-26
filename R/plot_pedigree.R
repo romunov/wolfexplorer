@@ -29,7 +29,4 @@ observeEvent(input$plot.pedigree, {
                   )
     )
   })
-  
-  
-  
 })
