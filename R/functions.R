@@ -243,8 +243,5 @@ fillParentsAndSexAndStatus <- function(samples, data, cluster) {
   data$status[data$offspring %in% dead_animals] <- 1
   # print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
   
-  shinyjs::alert(paste("Family has", nrow(fam), "members.", 
-                       paste(length(dead_animals), "known dead animal(s) in the family.", sep = " ")))
-  
   data
 }
