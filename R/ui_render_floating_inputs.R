@@ -67,7 +67,7 @@ observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
     output$cluster <- renderUI({
-      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c("", sort(unique(xy$cluster))))
+      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c(sort(unique(xy$cluster)))
     })
   } else {
     output$cluster <- renderUI({NULL})
