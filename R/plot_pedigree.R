@@ -5,15 +5,6 @@ observeEvent(input$plot.pedigree, {
   
   family <- fillParentsAndSexAndStatus(samples, relations, cluster)
   
-  # tole je testno, ki odstrani le enega znanega starša, v primeru, da nista znana ali neznana oba.
-  # Ne vem kako je Bine to reševal.
-  for (i in 1:nrow(family)) {
-    if (sum(family$mother[i] == "" | family$father[i] == "") == 1) {
-      family$mother[i] <- ""
-      family$father[i] <- ""
-    }
-  }
-  
   # izdelaj pedigree
   pdgr <- pedigree(id = family$offspring, 
                    dadid = family$father, 

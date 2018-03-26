@@ -187,12 +187,29 @@ calChull <- function(x) {
 
 fillParentsAndSexAndStatus <- function(samples, data, cluster) {
   samples$sex <- as.character(samples$sex)
+  
   # kinship2 needs sex data in that form.
   samples$sex[samples$sex == "M"] <- "male"
   samples$sex[samples$sex == "F"] <- "female"
   samples$sex[samples$sex == ""] <- "unknown"
   
   fam <- data[data$cluster == cluster, ] # subset data by cluster
+  
+  for (i in 1:nrow(fam)) {
+    if (nchar(fam$mother[i]) == 0) {
+      virtual.mother <- paste("UM", i, sep = "")
+      fam$mother[i] <- virtual.mother 
+      add.virtual.mother <- c(virtual.mother, "", "", cluster)
+      fam <- rbind(fam, add.virtual.mother)
+    }
+    if (nchar(fam$father[i]) == 0) {
+      virtual.father <- paste("UF", i, sep = "")
+      fam$father[i] <- virtual.father 
+      add.virtual.father <- c(virtual.father, "", "", cluster)
+      fam <- rbind(fam, add.virtual.father)
+    }
+  }
+  
   
   members <- na.omit(unique(unlist(fam[ , c("offspring", "father", "mother")]))) # find all cluster members
   members <- members[nchar(members) > 0]
@@ -216,6 +233,10 @@ fillParentsAndSexAndStatus <- function(samples, data, cluster) {
   
   # pridruži podatke o spolu
   data <- merge(x = fam, y = sex_data, by.x = "offspring", by.y = "animal", all = TRUE)
+  
+  data$sex[grep(pattern = "UM", x = data$offspring, ignore.case = TRUE)] <- "female"
+  data$sex[grep(pattern = "UF", x = data$offspring, ignore.case = TRUE)] <- "male"
+  
   print("Added sex data for all animals.")
   data$cluster <- cluster
   
