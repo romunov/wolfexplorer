@@ -215,7 +215,7 @@ fillParentsAndSexAndStatus <- function(samples, data, cluster) {
   members <- members[nchar(members) > 0]
   
   no.parents <- members[!(members %in% fam$offspring)] # find members without known parents
-  print(paste("Found", length(no.parents), "animals without known parents.", sep = " "))
+  # print(paste("Found", length(no.parents), "animals without known parents.", sep = " "))
   
   # fill empty parents to those members
   for (i in no.parents) {
@@ -223,7 +223,7 @@ fillParentsAndSexAndStatus <- function(samples, data, cluster) {
     fam <- rbind(fam, add.parents)
   }
   
-  print(paste("Family has", nrow(fam), "members.", sep = " "))
+  # print(paste("Family has", nrow(fam), "members.", sep = " "))
   
   # v podatkih o vzorcih poišči podatke o spolu članov družine
   sex_data <- unique(samples[samples$animal %in% members, c("animal", "sex")])
@@ -241,7 +241,7 @@ fillParentsAndSexAndStatus <- function(samples, data, cluster) {
   
   data$status <- 0
   data$status[data$offspring %in% dead_animals] <- 1
-  print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
+  # print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
   
   shinyjs::alert(paste("Family has", nrow(fam), "members.", 
                        paste(length(dead_animals), "known dead animal(s) in the family.", sep = " ")))
