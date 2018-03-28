@@ -21,7 +21,7 @@ observe({
   if (nrow(allData()) > 0) {
     output$animals <- renderUI({
       xy <- fData()
-      selectInput("animals", "Select Animal", multiple = TRUE, choices = unique(xy$animal)) })
+      selectInput("animals", "Select Animal", multiple = TRUE, choices = sort(unique(xy$animal))) })
   } else {
     output$animals <- renderUI({ NULL })
   }
@@ -56,7 +56,7 @@ observe({
     output$offspring <- renderUI({ NULL })
   } else {
     output$offspring <- renderUI({
-      selectInput("offspring", "Offspring", multiple = TRUE, choices = sibs$animal)
+      selectInput("offspring", "Offspring", multiple = TRUE, choices = sort(sibs$animal))
     })
   }
 })

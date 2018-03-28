@@ -14,7 +14,7 @@ observeEvent(input$plot.pedigree, {
                    missid = "")
   
   output$pedigree.plot <- renderPlot({
-    plot(pdgr, cex = 0.6)
+    plot(pdgr, cex = 0.65)
   })
   
   # this answer helped with collapsible panel - https://stackoverflow.com/questions/35175167/collapse-absolutepanel-in-shiny/35175847
