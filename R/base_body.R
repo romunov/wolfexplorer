@@ -16,7 +16,7 @@ body <- dashboardBody(
                               uiOutput("comment"),
                               uiOutput("sliderDate"),
                               uiOutput("cluster"),
-                              uiOutput("plot.pedigree"),
+                              uiOutput("pedig.plot"),
                               br(),
                               uiOutput("animals"),
                               uiOutput("offspring"),

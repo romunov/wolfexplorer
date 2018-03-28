@@ -21,7 +21,7 @@ observeEvent(input$plot.pedigree, {
   
   output$pedigree.panel <- renderUI({
     absolutePanel(id = "pedigree", class = "panel panel-default", fixed = TRUE,
-                  draggable = FALSE, top = "auto", left = 250, right = "auto", bottom = 15, 
+                  draggable = FALSE, top = "auto", left = 250, right = "auto", bottom = 10, 
                   width = 800, height = "auto",
                   HTML('<button data-toggle="collapse" data-target="#demo">Show / hide pedigree</button>'),
                   tags$div(id = "demo", class="collapse in",
@@ -30,3 +30,4 @@ observeEvent(input$plot.pedigree, {
     )
   })
 })
+

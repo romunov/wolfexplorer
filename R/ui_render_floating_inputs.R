@@ -67,20 +67,28 @@ observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
     output$cluster <- renderUI({
-      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c(sort(unique(xy$cluster))))
+      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c("All clusters" = "all", sort(unique(xy$cluster))))
     })
   } else {
     output$cluster <- renderUI({NULL})
   }
 })
 
+# observe({
+#   print(input$cluster)
+#   shinyjs::disable(id = "plot.pedigree")
+#   shinyjs::toggleState("plot.pedigree", is.null(input$cluster) && input$cluster == "all")
+#   print(!is.null(input$cluster) && input$cluster != "all")
+# })
+
 observe({
-  x <- input$cluster
-  if(length(x) > 0) {
-    output$plot.pedigree <- renderUI({
+  if(!is.null(input$cluster) && input$cluster != "all")
+  # if(length(input$cluster) > 0)
+    {
+    output$pedig.plot <- renderUI({
       actionButton("plot.pedigree", label = "Plot pedigree" )
     })
   } else {
-    output$plot.pedigree <- renderUI({NULL})
+    output$pedig.plot <- renderUI({NULL})
   }
 })

@@ -58,18 +58,23 @@ fOffs <- reactive({
 
 # Retrieve information about cluster, if offspring (heritage) data exists.
 getCluster <- reactive({
-  if (is.null(input$cluster)) {
-    return(NULL)
-  }
   
   kls <- inputFileParentage()
-  
-  # select only entries with animals from selected clusters/families
-  kls <- kls[kls$cluster %in% input$cluster, ]
-  
-  # and return only animal names of animals from selected clusters
   xy <- allData()
+  if(is.null(input$cluster)){
+    return(NULL)
+  }
+  if (input$cluster == "all") {
+    return(xy[, "animal"])
+  } else {
+    # select only entries with animals from selected clusters/families
+    kls <- kls[kls$cluster %in% input$cluster, ]
+    
+    # and return only animal names of animals from selected clusters
+    out <- xy[xy$animal %in% kls$offspring | xy$animal %in% kls$mother | xy$animal %in% kls$father, ]
+    return(out[, "animal"])
+  }
   
-  out <- xy[xy$animal %in% kls$offspring | xy$animal %in% kls$mother | xy$animal %in% kls$father, ]
-  return(out[, "animal"])
+  
+  
 })
