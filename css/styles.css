@@ -38,7 +38,7 @@ h1, h2, h3, h4 { font-weight: 400; }
 #pedigree {
   /* Appearance */
   background-color: white;
-  padding: 20px 35px 20px 35px;
+  padding: 5px 5px 5px 5px;
   cursor: move;
   /* Fade out while not hovering */
   opacity: 0.2;
