@@ -86,7 +86,7 @@ observe({
   # if(length(input$cluster) > 0)
     {
     output$pedig.plot <- renderUI({
-      actionButton("plot.pedigree", label = "Plot pedigree" )
+      checkboxInput(inputId = "plot.pedigree", label = "Plot pedigree", value = FALSE)
     })
   } else {
     output$pedig.plot <- renderUI({NULL})
