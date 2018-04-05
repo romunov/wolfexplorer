@@ -1,7 +1,7 @@
 observe({
   
   if (is.null(input$plot.pedigree)) return(NULL)
-  if (input$plot.pedigree == TRUE) {
+  if (input$plot.pedigree == TRUE && input$cluster != "all") {
     
     
     samples <- inputFileSamples()
@@ -36,5 +36,6 @@ observe({
     })
   }
   if (input$plot.pedigree == FALSE) { output$pedigree.panel <- renderUI({ NULL }) }
+  if (input$cluster == "all") { output$pedigree.panel <- renderUI({ NULL }) }
 })
 
