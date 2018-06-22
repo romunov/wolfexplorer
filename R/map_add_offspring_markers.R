@@ -3,7 +3,7 @@ observe({
   PS <- PS()
   offInput <- input$offspring
   
-  off <- fOffs()[fOffs()$animal %in% offInput, ]
+  off <- fOffs()[fOffs()$reference_sample %in% offInput, ]
   
   # Add parentage data if provided.
   off <- addParentageData(xy = off, parents = inputFileParentage())
@@ -19,11 +19,11 @@ observe({
       clearGroup(group = "sibMarkers") %>% 
       clearGroup(group = "sibLines")
     # Add lines
-    for (i in unique(off$animal)) {
+    for (i in unique(off$reference_sample)) {
       out.off <- addPolylines(map = out.off, lng = ~lng, lat = ~lat, 
-                              layerId = paste("sibLines", off$id[off$animal == i], sep = " "),
+                              layerId = paste("sibLines", off$id[off$reference_sample == i], sep = " "),
                               group = "Offspring",
-                              data = off[off$animal == i, ],
+                              data = off[off$reference_sample == i, ],
                               color = "#fdc086", 
                               opacity = input$offspring_opacity, 
                               weight = 0.5)

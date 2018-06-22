@@ -12,7 +12,7 @@ observe({
       xy <- addParentageData(x = parent, parents = inputFileParentage())
       
       if (length(input$animals) > 0) {
-        parent <- xy[(xy$animal %in% input$animals), ]
+        parent <- xy[(xy$reference_sample %in% input$animals), ]
       } else {
         parent <- xy[0, ]
       }
@@ -24,7 +24,7 @@ observe({
       parent$class <- "parent"
       
       # prepare offspring data
-      offspring <- fOffs()[fOffs()$animal %in% input$offspring, ]
+      offspring <- fOffs()[fOffs()$reference_sample %in% input$offspring, ]
       offspring <- addParentageData(x = offspring, parents = inputFileParentage())
       
       if (nrow(offspring) > 0) {
@@ -35,7 +35,7 @@ observe({
       }
       
       # create polygon for each animal
-      ani.list <- split(xy, f = droplevels(xy$animal))
+      ani.list <- split(xy, f = droplevels(xy$reference_sample))
       mcp <- sapply(ani.list, FUN = calChull, simplify = FALSE)
       
       if (dmcl) {
@@ -85,7 +85,7 @@ observe({
         num.offspring <- xy[xy$mother %in% i | xy$father %in% i, ] # find all offspring for parent i
         
         if (nrow(num.offspring) > 0) {
-          cent.i.offspring <- unique(num.offspring$animal) # isolate offspring animals
+          cent.i.offspring <- unique(num.offspring$reference_sample) # isolate offspring animals
           
           for (j in cent.i.offspring) {
             if (any(names(mcp.centroid) %in% j)) {

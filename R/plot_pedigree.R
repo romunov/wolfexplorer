@@ -8,7 +8,7 @@ observe({
     relations <- inputFileParentage()
     cluster <- input$cluster
     
-    family <- fillParentsAndSexAndStatus(samples, relations, cluster)
+    family <- fillSexAndStatus(samples, relations, cluster)
     
     # izdelaj pedigree
     pdgr <- pedigree(id = family$offspring, 
@@ -16,7 +16,7 @@ observe({
                      momid = family$mother, 
                      sex = family$sex, 
                      status = family$status,
-                     missid = "")
+                     missid = "0")
     
     output$pedigree.plot <- renderPlot({
       plot(pdgr, cex = 0.65)
