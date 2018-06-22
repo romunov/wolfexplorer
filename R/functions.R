@@ -227,7 +227,7 @@ fillSexAndStatus <- function(samples, data, cluster) {
     fam <- rbind(fam, add.parents)
   }
 
-  print(paste("Family has", nrow(fam), "members.", sep = " "))
+  # print(paste("Family has", nrow(fam), "members.", sep = " "))
 
   # v podatkih o vzorcih poišči podatke o spolu članov družine
   sex_data <- unique(samples[samples$reference_sample %in% members, c("reference_sample", "sex")])
@@ -245,7 +245,7 @@ fillSexAndStatus <- function(samples, data, cluster) {
 
   data$status <- 0
   data$status[data$offspring %in% dead_animals] <- 1
-  print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
+  # print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
 
   data
 }
