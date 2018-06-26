@@ -35,7 +35,7 @@ populatePopup <- function(x) {
                    <dt>Sex: %s</dt>
                    <dt>Known parents: %s</dt>
                    <dt>Sample type: %s</dt>",
-                 x$animal,
+                 x$reference_sample,
                  x$date,
                  x$sex,
                  x$label,
@@ -53,7 +53,7 @@ populatePolygonPopup <- function(x) {
                    <dt>Sex: %s</dt>
                    <dt>Known parents: %s</dt>
                    <dt>Num. of samples: %s</dt>",
-                                 unique(x$animal),
+                                 unique(x$reference_sample),
                                  min(x$date),
                                  max(x$date),
                                  unique(x$sex),
@@ -71,7 +71,7 @@ addParentageData <- function(xy, parents) {
       parents[parents$mother == "", "mother"] <- "Unknown"
       parents[parents$father == "", "father"] <- "Unknown"
       
-      xy <- merge(xy, parents, by.x = "animal", by.y = "offspring", all.x = TRUE)
+      xy <- merge(xy, parents, by.x = "reference_sample", by.y = "offspring", all.x = TRUE)
       xy$label <- sprintf("M: %s F: %s", xy$mother, xy$father)
     } else {
       xy$label <- "M: No data F: No data"

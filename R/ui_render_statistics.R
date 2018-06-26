@@ -5,7 +5,7 @@ observe({
   par <- inputFileParentage()
   
   if(nrow(xy) > 0) {
-    ani <- length(unique(xy$animal))
+    ani <- length(unique(xy$reference_sample))
     male <- length(df$sex[df$sex == "M"])
     female <- length(df$sex[df$sex == "F"])
     clusters <- length(unique(par$cluster))
