@@ -14,7 +14,7 @@ fData <- reactive({
     # make available only animals from selected cluster
     getklus <- getCluster()
     if (!is.null(getklus)) {
-      xy <- xy[xy$animal %in% getklus, ]
+      xy <- xy[xy$reference_sample %in% getklus, ]
     }
     
     # and select by datum range
@@ -27,7 +27,7 @@ fData <- reactive({
 wolfPicks <- reactive({
   xy <- fData()
   if (nrow(xy) > 0 & length(input$animals) > 0) {
-    xy[(xy$animal %in% input$animals), ]
+    xy[(xy$reference_sample %in% input$animals), ]
   } else {
     xy[0, ]
   }
@@ -45,12 +45,12 @@ mortality <- reactive({
 # Filter out offspring from data
 fOffs <- reactive({
   xy <- fData()
-  x <- unique(wolfPicks()$animal)
+  x <- unique(wolfPicks()$reference_sample)
   offspring <- inputFileParentage()
   
   if (nrow(offspring) > 0) {
     offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "offspring"]
-    xy[(xy$animal %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
+    xy[(xy$reference_sample %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     offspring
   }
@@ -58,18 +58,23 @@ fOffs <- reactive({
 
 # Retrieve information about cluster, if offspring (heritage) data exists.
 getCluster <- reactive({
-  if (is.null(input$cluster)) {
-    return(NULL)
-  }
   
   kls <- inputFileParentage()
-  
-  # select only entries with animals from selected clusters/families
-  kls <- kls[kls$cluster %in% input$cluster, ]
-  
-  # and return only animal names of animals from selected clusters
   xy <- allData()
+  if(is.null(input$cluster)){
+    return(NULL)
+  }
+  if (input$cluster == "all") {
+    return(xy[, "reference_sample"])
+  } else {
+    # select only entries with animals from selected clusters/families
+    kls <- kls[kls$cluster %in% input$cluster, ]
+    
+    # and return only animal names of animals from selected clusters
+    out <- xy[xy$reference_sample %in% kls$offspring | xy$reference_sample %in% kls$mother | xy$reference_sample %in% kls$father, ]
+    return(out[, "reference_sample"])
+  }
   
-  out <- xy[xy$animal %in% kls$offspring | xy$animal %in% kls$mother | xy$animal %in% kls$father, ]
-  return(out[, "animal"])
+  
+  
 })

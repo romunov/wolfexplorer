@@ -1,11 +1,11 @@
 inputFileSamples <- reactive({
   x <- input$data_samples
   if (is.null(x)) {
-    data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA)[0, ]
+    data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA, reference_sample = NA)[0, ]
   } else {
     x <- tryCatch(fread(x$datapath, 
                         encoding = "UTF-8",
-                        colClasses = c("numeric", "numeric", "character", "character", "character", "character", "character" ),
+                        colClasses = c("numeric", "numeric", "character", "character", "character", "character", "character", "character"),
                         data.table = FALSE),
                   error = function(e) e,
                   warning = function(w) w
@@ -13,12 +13,12 @@ inputFileSamples <- reactive({
     
     if (any(class(x) %in% c("simpleWarning", "simpleError"))) {
       alert("Input data not formatted properly. Please compare your input file to the specs.")
-      x <- data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA)[0, ]
+      x <- data.frame(lng = NA, lat = NA, date = NA, sample_type = NA, animal = NA, sex = NA, sample_name = NA, id = NA, reference_sample = NA)[0, ]
       return(x)
     }
     
     validate(
-      need(all(colnames(x) %in% c("x", "y", "date", "sample_type", "animal", "sex", "sample_name")), 
+      need(all(colnames(x) %in% c("x", "y", "date", "sample_type", "animal", "sex", "sample_name", "reference_sample")), 
            "Column names not as expected.")
     )
     

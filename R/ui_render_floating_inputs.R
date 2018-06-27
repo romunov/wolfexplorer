@@ -21,7 +21,7 @@ observe({
   if (nrow(allData()) > 0) {
     output$animals <- renderUI({
       xy <- fData()
-      selectInput("animals", "Select Animal", multiple = TRUE, choices = unique(xy$animal)) })
+      selectInput("animals", "Select Animal", multiple = TRUE, choices = sort(unique(xy$reference_sample))) })
   } else {
     output$animals <- renderUI({ NULL })
   }
@@ -56,7 +56,7 @@ observe({
     output$offspring <- renderUI({ NULL })
   } else {
     output$offspring <- renderUI({
-      selectInput("offspring", "Offspring", multiple = TRUE, choices = sibs$animal)
+      selectInput("offspring", "Offspring", multiple = TRUE, choices = sort(sibs$reference_sample))
     })
   }
 })
@@ -67,9 +67,28 @@ observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
     output$cluster <- renderUI({
-      selectInput("cluster", "Cluster/Family", multiple = TRUE, choices = sort(unique(xy$cluster)))
+      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c("All clusters" = "all", sort(unique(xy$cluster))))
     })
   } else {
     output$cluster <- renderUI({NULL})
+  }
+})
+
+# observe({
+#   print(input$cluster)
+#   shinyjs::disable(id = "plot.pedigree")
+#   shinyjs::toggleState("plot.pedigree", is.null(input$cluster) && input$cluster == "all")
+#   print(!is.null(input$cluster) && input$cluster != "all")
+# })
+
+observe({
+  if(!is.null(input$cluster) && input$cluster != "all")
+  # if(length(input$cluster) > 0)
+    {
+    output$pedig.plot <- renderUI({
+      checkboxInput(inputId = "plot.pedigree", label = "Plot pedigree", value = FALSE)
+    })
+  } else {
+    output$pedig.plot <- renderUI({NULL})
   }
 })

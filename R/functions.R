@@ -35,7 +35,7 @@ populatePopup <- function(x) {
                    <dt>Sex: %s</dt>
                    <dt>Known parents: %s</dt>
                    <dt>Sample type: %s</dt>",
-                 x$animal,
+                 x$reference_sample,
                  x$date,
                  x$sex,
                  x$label,
@@ -53,7 +53,7 @@ populatePolygonPopup <- function(x) {
                    <dt>Sex: %s</dt>
                    <dt>Known parents: %s</dt>
                    <dt>Num. of samples: %s</dt>",
-                                 unique(x$animal),
+                                 unique(x$reference_sample),
                                  min(x$date),
                                  max(x$date),
                                  unique(x$sex),
@@ -71,7 +71,7 @@ addParentageData <- function(xy, parents) {
       parents[parents$mother == "", "mother"] <- "Unknown"
       parents[parents$father == "", "father"] <- "Unknown"
       
-      xy <- merge(xy, parents, by.x = "animal", by.y = "offspring", all.x = TRUE)
+      xy <- merge(xy, parents, by.x = "reference_sample", by.y = "offspring", all.x = TRUE)
       xy$label <- sprintf("M: %s F: %s", xy$mother, xy$father)
     } else {
       xy$label <- "M: No data F: No data"
@@ -174,4 +174,78 @@ calChull <- function(x) {
     suppressWarnings(mcp <- SpatialPolygons(list(Polygons(list(Polygon(mcp)), ID = 1))))
     return(mcp)
   }
+}
+
+
+#' Function checks that all animals from selected cluster have known parents.
+#' In case of missing parents it fills them with "", which enables kinship2 package
+#' to plot the pedigree. It also adds information about sex and status to the dataset.
+#' @param samples A data.frame with samples data
+#' @param data A data.frame with parentage data
+#' @param cluster Selected cluster
+
+
+fillSexAndStatus <- function(samples, data, cluster) {
+  
+  # browser()
+  
+  samples$sex <- as.character(samples$sex)
+  
+  # kinship2 needs sex data in that form.
+  samples$sex[samples$sex == "M"] <- "male"
+  samples$sex[samples$sex == "F"] <- "female"
+  samples$sex[samples$sex == "NA"] <- "unknown"
+
+  fam <- data[data$cluster == cluster, ] # subset data by cluster
+
+  # for (i in 1:nrow(fam)) {
+  #   if (nchar(fam$mother[i]) == 0) {
+  #     virtual.mother <- paste("UM", i, sep = "")
+  #     fam$mother[i] <- virtual.mother
+  #     add.virtual.mother <- c(virtual.mother, "", "", cluster)
+  #     fam <- rbind(fam, add.virtual.mother)
+  #   }
+  #   if (nchar(fam$father[i]) == 0) {
+  #     virtual.father <- paste("UF", i, sep = "")
+  #     fam$father[i] <- virtual.father
+  #     add.virtual.father <- c(virtual.father, "", "", cluster)
+  #     fam <- rbind(fam, add.virtual.father)
+  #   }
+  # }
+
+
+  members <- na.omit(unique(unlist(fam[ , c("offspring", "father", "mother")]))) # find all cluster members
+  members <- members[nchar(members) > 0]
+
+  no.parents <- members[!(members %in% fam$offspring)] # find members without known parents
+  
+  # # print(paste("Found", length(no.parents), "animals without known parents.", sep = " "))
+
+  # fill empty parents to those members
+  for (i in no.parents) {
+    add.parents <- c(i, "", "", cluster)
+    fam <- rbind(fam, add.parents)
+  }
+
+  # print(paste("Family has", nrow(fam), "members.", sep = " "))
+
+  # v podatkih o vzorcih poišči podatke o spolu članov družine
+  sex_data <- unique(samples[samples$reference_sample %in% members, c("reference_sample", "sex")])
+
+  dead_animals <- samples[samples$sample_type %in% c("Decomposing Tissue", "Tissue") &
+                            samples$reference_sample %in% members, c("reference_sample")]
+
+  # pridruži podatke o spolu
+  data <- merge(x = fam, y = sex_data, by.x = "offspring", by.y = "reference_sample", all = TRUE)
+
+  data$sex[grep(pattern = "[*]", x = data$offspring, ignore.case = TRUE)] <- "male"
+  data$sex[grep(pattern = "[#]", x = data$offspring, ignore.case = TRUE)] <- "female"
+
+  data$cluster <- cluster
+
+  data$status <- 0
+  data$status[data$offspring %in% dead_animals] <- 1
+  # print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
+
+  data
 }

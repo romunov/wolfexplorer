@@ -16,10 +16,13 @@ body <- dashboardBody(
                               uiOutput("comment"),
                               uiOutput("sliderDate"),
                               uiOutput("cluster"),
+                              uiOutput("pedig.plot"),
+                              br(),
                               uiOutput("animals"),
                               uiOutput("offspring"),
                               uiOutput("mcp")
-                )
+                ),
+                uiOutput("pedigree.panel") 
             )
     ),
     tabItem(tabName = "data_samples",

@@ -12,7 +12,7 @@ observe({
     
     # Subset potential animals selected in the selectInput menu.
     if (length(input$animals) > 0) {
-      picks <- xy[(xy$animal %in% input$animals), ]
+      picks <- xy[(xy$reference_sample %in% input$animals), ]
     } else {
       picks <- xy[0, ]
     }
@@ -42,11 +42,11 @@ observe({
     
     if (nrow(picks) > 0) {
       # Add lines
-      for (i in unique(picks$animal)) {
+      for (i in unique(picks$reference_sample)) {
         outmap <- addPolylines(map = outmap, lng = ~lng, lat = ~lat, 
-                               layerId = paste("aniLines", picks$id[picks$animal == i], sep = " "),
+                               layerId = paste("aniLines", picks$id[picks$reference_sample == i], sep = " "),
                                group = "Selected animals",
-                               data = picks[picks$animal == i, ],
+                               data = picks[picks$reference_sample == i, ],
                                color = "black", 
                                opacity = input$parent_opacity, 
                                weight = 0.5)

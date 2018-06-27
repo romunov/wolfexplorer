@@ -13,8 +13,10 @@ library(tidyr)
 library(plyr)
 library(rgeos)
 library(htmltools)
+library(kinship2)
 
 source("./R/functions.R")
+# source("./R/prepForPedigree.R")
 
 # Add header.
 source("./R/base_header.R", local = TRUE)
@@ -45,6 +47,9 @@ server <- function(input, output) {
   
   #### LEAFLET MAGIC ####
   source("./R/leaflet.R", local = TRUE)
+  
+  #### PLOT PEDIGREE ####
+  source("./R/plot_pedigree.R", local = TRUE)
   
 }
 
