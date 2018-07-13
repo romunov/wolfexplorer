@@ -5,7 +5,7 @@ colors.df$mapping <- data.frame(sample_type_levels = numeric(0),
                                 ui_name = numeric(0), stringsAsFactors = FALSE)
 observe({
   if (nrow(colors.df$mapping) == 0 & nrow(allData()) > 0) {
-    st <- levels(allData()$sample_type)
+    st <- unique(allData()$sample_type)
     colors.df$mapping <- data.frame(sample_type_levels = st,
                                     sample_type_colors = brewer.pal(n = length(st), name = "Set1"),
                                     ui_name = sprintf("ui_%s", gsub(" ", "_", tolower(st))),
