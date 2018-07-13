@@ -16,7 +16,6 @@ library(htmltools)
 library(kinship2)
 
 source("./R/functions.R")
-# source("./R/prepForPedigree.R")
 
 # Add header.
 source("./R/base_header.R", local = TRUE)

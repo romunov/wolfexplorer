@@ -21,8 +21,8 @@ GKtoWGS <- function(df) {
     df <- as.data.frame(df)
     df
   } else {
-    names(df)[grepl("^x$", names(df))] <- "lng"
-    names(df)[grepl("^y$", names(df))] <- "lat"
+    names(df)[grepl("^x$", names(df))] <- "lat"
+    names(df)[grepl("^y$", names(df))] <- "lng"
     df
   }
 }
