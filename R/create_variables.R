@@ -50,7 +50,8 @@ fOffs <- reactive({
   
   if (nrow(offspring) > 0) {
     offs <- offspring[offspring$mother %in% x | offspring$father %in% x, "offspring"]
-    xy[(xy$reference_sample %in% offs) & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
+    xy[(xy$reference_sample %in% offs) 
+       & (xy$date >= input$datumrange[1] & xy$date <= input$datumrange[2]), ]
   } else {
     offspring
   }
@@ -71,7 +72,10 @@ getCluster <- reactive({
     kls <- kls[kls$cluster %in% input$cluster, ]
     
     # and return only animal names of animals from selected clusters
-    out <- xy[xy$reference_sample %in% kls$offspring | xy$reference_sample %in% kls$mother | xy$reference_sample %in% kls$father, ]
+    out <- xy[
+      xy$reference_sample %in% kls$offspring | 
+        xy$reference_sample %in% kls$mother | 
+        xy$reference_sample %in% kls$father, ]
     return(out[, "reference_sample"])
   }
   

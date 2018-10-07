@@ -21,7 +21,8 @@ observe({
   if (nrow(allData()) > 0) {
     output$animals <- renderUI({
       xy <- fData()
-      selectInput("animals", "Select Animal", multiple = TRUE, choices = sort(unique(xy$reference_sample))) })
+      selectInput("animals", "Select Animal", multiple = TRUE, 
+                  choices = sort(unique(xy$reference_sample))) })
   } else {
     output$animals <- renderUI({ NULL })
   }
@@ -42,8 +43,9 @@ observe({
     output$sliderDate <- renderUI({ NULL })
   } else {
     output$sliderDate <- renderUI({
-      sliderInput("datumrange", "Date range", min = min(allData()$date), max = max(allData()$date),
-                  value = range(allData()$date), step = 1)
+      sliderInput("datumrange", "Date range", min = min(allData()$date), 
+                  max = max(allData()$date), value = range(allData()$date), 
+                  step = 1)
     })
   }
 })
@@ -56,7 +58,8 @@ observe({
     output$offspring <- renderUI({ NULL })
   } else {
     output$offspring <- renderUI({
-      selectInput("offspring", "Offspring", multiple = TRUE, choices = sort(sibs$reference_sample))
+      selectInput("offspring", "Offspring", multiple = TRUE, 
+                  choices = sort(sibs$reference_sample))
     })
   }
 })
@@ -67,19 +70,13 @@ observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
     output$cluster <- renderUI({
-      selectInput("cluster", "Cluster/Family", multiple = FALSE, choices = c("All clusters" = "all", sort(unique(xy$cluster))))
+      selectInput("cluster", "Cluster/Family", multiple = FALSE, 
+                  choices = c("All clusters" = "all", sort(unique(xy$cluster))))
     })
   } else {
     output$cluster <- renderUI({NULL})
   }
 })
-
-# observe({
-#   print(input$cluster)
-#   shinyjs::disable(id = "plot.pedigree")
-#   shinyjs::toggleState("plot.pedigree", is.null(input$cluster) && input$cluster == "all")
-#   print(!is.null(input$cluster) && input$cluster != "all")
-# })
 
 observe({
   if(!is.null(input$cluster) && input$cluster != "all")

@@ -25,7 +25,8 @@ observe({
            col = "#31a354")
     })
     
-    # this answer helped with collapsible panel - https://stackoverflow.com/questions/35175167/collapse-absolutepanel-in-shiny/35175847
+    # this answer helped with collapsible panel
+    # https://stackoverflow.com/questions/35175167/collapse-absolutepanel-in-shiny/35175847
     
     output$pedigree.panel <- renderUI({
       absolutePanel(id = "pedigree", class = "panel panel-default", fixed = TRUE,
@@ -38,7 +39,11 @@ observe({
       )
     })
   }
-  if (input$plot.pedigree == FALSE) { output$pedigree.panel <- renderUI({ NULL }) }
-  if (input$cluster == "all") { output$pedigree.panel <- renderUI({ NULL }) }
+  if (input$plot.pedigree == FALSE) {
+    output$pedigree.panel <- renderUI({ NULL })
+    }
+  if (input$cluster == "all") {
+    output$pedigree.panel <- renderUI({ NULL })
+    }
 })
 
