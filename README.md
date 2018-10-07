@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 # wolfexplorer
 Explorer designed to visualize complex multi-year multi-specimen data. Case study of (Slovenian) wolves.
 
@@ -17,7 +22,7 @@ shiny::runGitHub(repo = "wolfexplorer", username = "romunov")
 `*` you can install packages listed in the [`app.R`](https://github.com/romunov/wolfexplorer/blob/master/app.R#L1) using something along the lines of
 
 ```
-install.packages(c("shiny", "shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "htmltools", "kinship2"))
+install.packages(c("shiny", "shinydashboard", "shinyjs", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "htmltools", "kinship2"))
 ```
 
 ## The manual way
@@ -87,6 +92,9 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 
 ![](./img/selected_all.png)
 
+It is also possible to plot pedigree tree. Once you've selected parentage data and selected a cluster ("family"), check `Plot pedigree` checkmark.
+
+![](./img/parentage.png)
 You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created.
 
 ![](./img/mcp.png)
