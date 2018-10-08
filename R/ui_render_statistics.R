@@ -34,7 +34,6 @@ observe({
 
 observe({
   xy <- fData()
-  # xy <- read.csv("data/samples_data_wolves_slo.txt", colClasses = "character")
   sam_typ <- data.frame(table(xy$sample_type))
   par <- inputFileParentage()
   par.t <- gather(par, -offspring, key = parent, value = value)

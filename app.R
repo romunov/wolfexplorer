@@ -1,5 +1,4 @@
 library(shinydashboard)
-library(shinyjs)
 library(leaflet)
 library(RColorBrewer)
 library(DT)

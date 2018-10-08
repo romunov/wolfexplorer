@@ -1,5 +1,4 @@
 body <- dashboardBody(
-  useShinyjs(),
   tags$style(type = "text/css", "#map {height: 100% !important;}"),
   tabItems(
     tabItem(tabName = "explore",
