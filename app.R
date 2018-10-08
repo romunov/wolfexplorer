@@ -1,4 +1,3 @@
-# library(shiny)
 library(shinydashboard)
 library(shinyjs)
 library(leaflet)
@@ -12,7 +11,6 @@ library(colourpicker)
 library(tidyr)
 library(plyr)
 library(rgeos)
-# library(htmltools)
 library(kinship2)
 
 source("./R/functions.R")
