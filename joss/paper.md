@@ -30,7 +30,7 @@ Central piece of the application is a map and an inputs panel that enables users
 
 Brief instructions on how to install and use the application are available at https://github.com/romunov/wolfexplorer, where sample dataset from Monitoring of Conservation Status of Wolves in Slovenia in 2016/2017 [@Bartol:2017] is also supplied. Even though the name may indicate its inevitable connection to wolves, the application performs well with any dataset of this kind. 
 
-Wolfexplorer requires shinydashboard [@shinydashboard], shinyjs [@shinyjs], leaflet [@leaflet], RColorBrewer [@rcolorbrewer], DT [@dt], sp [@pebesma2005; @bivand2013], rgdal [@rgdal], data.table [@data.table], ggplot2 [@ggplot2], colourpicker [@colourpicker], tidyr [@tidyr], plyr [@plyr], rgeos [@rgeos], kinship2 [@kinship2] and htmltools [@htmltools].
+Wolfexplorer requires `shinydashboard` [@shinydashboard], `shinyjs` [@shinyjs], `leaflet` [@leaflet], `RColorBrewer` [@rcolorbrewer], `DT` [@dt], `sp` [@pebesma2005; @bivand2013], `rgdal` [@rgdal], `data.table` [@data.table], `ggplot2` [@ggplot2], `colourpicker` [@colourpicker], `tidyr` [@tidyr], `plyr` [@plyr], `rgeos` [@rgeos], `kinship2` [@kinship2] and `htmltools` [@htmltools].
 
 # Acknowledgements
 
