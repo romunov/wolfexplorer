@@ -4,12 +4,12 @@ output:
     keep_md: yes
 ---
 # wolfexplorer
-Explorer designed to visualize complex multi-year multi-specimen data. Case study of (Slovenian) wolves.
+Explorer designed to visualize complex multi-year multi-specimen data. Attached data is a subset of data from wolf monitoring of wolves in Slovenia in season 2016/2017 ([summary in English](http://www.natura2000.si/uploads/tx_library/MonitoringVolk__summary.pdf])).
 
 ### Limitations
 This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
 
-WARNING: Date slider and some other features may not be working perfectly in some browsers (I'm looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testsing has been done on Firefox.
+WARNING: Date slider and some other features may not be working perfectly in some browsers (looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testing has been done on Firefox.
 
 # How to run this application
 ## The easy way

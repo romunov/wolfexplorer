@@ -4,12 +4,12 @@ output:
     keep_md: yes
 ---
 # wolfexplorer
-Explorer designed to visualize complex multi-year multi-specimen data. Case study of (Slovenian) wolves.
+Explorer designed to visualize complex multi-year multi-specimen data. Attached data is a subset of data from wolf monitoring of wolves in Slovenia in season 2016/2017 ([summary in English](http://www.natura2000.si/uploads/tx_library/MonitoringVolk__summary.pdf])).
 
 ### Limitations
 This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
 
-WARNING: Date slider and some other features may not be working perfectly in some browsers (I'm looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testsing has been done on Firefox.
+WARNING: Date slider and some other features may not be working perfectly in some browsers (looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testing has been done on Firefox.
 
 # How to run this application
 ## The easy way
@@ -22,7 +22,7 @@ shiny::runGitHub(repo = "wolfexplorer", username = "romunov")
 `*` you can install packages listed in the [`app.R`](https://github.com/romunov/wolfexplorer/blob/master/app.R#L1) using something along the lines of
 
 ```
-install.packages(c("shiny", "shinydashboard", "shinyjs", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "htmltools", "kinship2"))
+install.packages(c("shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "kinship2"))
 ```
 
 ## The manual way
@@ -96,7 +96,7 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 It is also possible to plot pedigree tree. Once you've selected parentage data and selected a cluster ("family"), check `Plot pedigree` checkmark.
 
 ![](./img/parentage.png)
-You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created. Additionaly, centroids of offspring's MCPs are connected to the parents' MCP centroid.
+You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created.
 
 ![](./img/mcp.png)
 
