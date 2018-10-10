@@ -1,5 +1,5 @@
 ---
-  title: "wolfexplorer: a tool for visualization and exploration of complex multi-year multi-specimen datasets"
+title: 'wolfexplorer: a tool for visualization and exploration of complex multi-year multi-specimen datasets'
 tags:
   - spatio-temporal genetic data
   - shinydasboard
