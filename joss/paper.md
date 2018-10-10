@@ -5,16 +5,16 @@ tags:
   - shinydasboard
   - R
 authors:
-  - name: Roman Luštrik
-  orcid:  0000-0002-1410-8253
-  affiliation: 1
-  - name: Žan Kuralt
-  orcid: 0000-0001-7201-4282
-  affiliation: 2
+ - name: Roman Luštrik
+   orcid:  0000-0002-1410-8253
+   affiliation: 1
+ - name: Žan Kuralt
+   orcid: 0000-0001-7201-4282
+   affiliation: 2
 affiliations:
-  - name: Genialis, Inc.
+- name: Genialis, Inc.
   index: 1
-  - name: Biotechnical faculty, University of Ljubljana, Jamnikarjeva 101, SI-1000 Ljubljana, Slovenia
+- name: Biotechnical faculty, University of Ljubljana, Jamnikarjeva 101, SI-1000 Ljubljana, Slovenia
   index: 2
 date: October 2018
 bibliography: paper.bib
