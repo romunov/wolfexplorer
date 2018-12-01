@@ -7,9 +7,19 @@ output:
 Explorer designed to visualize complex multi-year multi-specimen data. Attached data is a subset of data from wolf monitoring of wolves in Slovenia in season 2016/2017 ([summary in English](http://www.natura2000.si/uploads/tx_library/MonitoringVolk__summary.pdf)).
 
 ### Limitations
-This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
+This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS 84 (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
 
 WARNING: Date slider and some other features may not be working perfectly in some browsers (looking at you, Chrome). If you experience problems, please do drop us a line and switch browsers. Testing has been done on Firefox.
+
+### Community guidelines
+1) **Contributing to the software**  
+Anyone interested is welcome to contribute to the software. There are a few ways to do it.  
+Firstly, if there is a feature that you would like us to add, you can open a new [issue](https://github.com/romunov/wolfexplorer/issues) with an **enhancement** tag.  
+Secondly, you can fork the repository, do your magic and offer your upgraded code through a pull request. When writing code please folow [R Style Guide](https://github.com/romunov/r_style_guide).
+2) **Reporting issues or problems with the software**  
+Github makes it easy to report issues with the software. Simply navigate to the [issues tab](https://github.com/romunov/wolfexplorer/issues) and check if there is an issue similar to one you are experiencing already reported. If so, you are more than welcome to add your experience in a form of a comment to that issue thread. Otherwise, do not hesitate to report a new issue, that has not been previously reported.  
+3) **Seeking support**  
+Feel free to contact us through [email](mailto:wolfexplorer.help@gmail.com). We are also both on twitter as [romunov](https://twitter.com/romunov) and [zkuralt](https://twitter.com/zkuralt). 
 
 # How to run this application
 ## The easy way
@@ -60,7 +70,7 @@ Samples data should come in the following raw text format:
  $ reference_sample: chr  "AH.02UE" "AH.02UH" "AH.0388" "AH.038A" ...
 ```
 
-Notice the name of columns. In this example the coordinates for `x` and `y` are "Gauss Krüger" (EPSG: 3912). You should supply WGS (EPSG: 4326) coordinates for longitude and latitude, respectively, as they will be used without converting. See [GKtoWGS.R](https://github.com/romunov/wolfexplorer/blob/master/GKtoWGS.R) for implementation of conversion. This would also be the place to perhaps add your "parser" to accomodate your coordinate format.
+Notice the name of columns. In this example the coordinates for `x` and `y` are "Gauss Krüger" (EPSG: 3912). You should supply WGS 84 (EPSG: 4326) coordinates for longitude and latitude, respectively, as they will be used without converting. See [GKtoWGS.R](https://github.com/romunov/wolfexplorer/blob/master/GKtoWGS.R) for implementation of conversion. This would also be the place to perhaps add your "parser" to accomodate your coordinate format.
 
 `date` should come in the `%Y-%m-%d` form. `sample_type` right now is hard coded but this restriction will probably be relaxed in the near future. The rest should be pretty self explanatory. Animal is the designation for a group (or a singleton) of genotypes, `sex` and `sample_name` appear in the popup to aid in exploring of data.
 

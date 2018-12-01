@@ -1,6 +1,20 @@
 Title: Explorer designed to visualize complex multi-year multi-specimen data. Case study of Slovenian wolves.
+Imports: 
+    shinydashboard (>= 0.7.0),
+    leaflet (>= 2.0.1),
+    RColorBrewer (>= 1.1-2), 
+    DT (>= 0.4),
+    sp (>= 1.2-7), 
+    rgdal (>= 0.3-26),
+    data.table (>= 1.11.4),
+    ggplot2 (>= 3.0.0.9000),
+    colourpicker (>= 1.0),
+    tidyr (>= 0.8.0),
+    plyr (>= 1.8.4),
+    rgeos (>= 0.3-26),
+    kinship2 (>= 1.6.4)
 version: 0.9
-Authors: Roman Luštrik & Žan Kuralt
+Authors: Roman Luštrik (@romunov) & Žan Kuralt (@zkuralt)
 License: GNU GENERAL PUBLIC LICENSE
 DisplayMode: Normal
 Type: Shiny
