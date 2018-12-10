@@ -4,6 +4,8 @@ output:
   html_document: 
     keep_md: yes
 ---
+[![status](http://joss.theoj.org/papers/1250a1c97f53a38efece1c973b499104/status.svg)](http://joss.theoj.org/papers/1250a1c97f53a38efece1c973b499104)
+
 Explorer designed to visualize complex multi-year multi-specimen data. Attached data is a subset of data from wolf monitoring of wolves in Slovenia in season 2016/2017 ([summary in English](http://www.natura2000.si/uploads/tx_library/MonitoringVolk__summary.pdf)).
 
 ### Limitations
@@ -15,7 +17,7 @@ WARNING: Date slider and some other features may not be working perfectly in som
 1) **Contributing to the software**  
 Anyone interested is welcome to contribute to the software. There are a few ways to do it.  
 Firstly, if there is a feature that you would like us to add, you can open a new [issue](https://github.com/romunov/wolfexplorer/issues) with an **enhancement** tag.  
-Secondly, you can fork the repository, do your magic and offer your upgraded code through a pull request. When writing code please folow [R Style Guide](https://github.com/romunov/r_style_guide).
+Secondly, you can fork the repository, do your magic and offer your upgraded code through a pull request. When writing code please follow [R Style Guide](https://github.com/romunov/r_style_guide). 
 2) **Reporting issues or problems with the software**  
 Github makes it easy to report issues with the software. Simply navigate to the [issues tab](https://github.com/romunov/wolfexplorer/issues) and check if there is an issue similar to one you are experiencing already reported. If so, you are more than welcome to add your experience in a form of a comment to that issue thread. Otherwise, do not hesitate to report a new issue, that has not been previously reported.  
 3) **Seeking support**  
