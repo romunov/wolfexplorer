@@ -1,7 +1,7 @@
 # Render floating inputs which control selection on the map.
 observe({
   output$menu_data <- renderMenu({
-    menuItem("Load data", tabName = "upload", icon = icon("paw"), startExpanded = TRUE, 
+    menuItem("View data", tabName = "view_data", icon = icon("paw"), startExpanded = TRUE, 
              menuSubItem(text = "Samples data", tabName = "data_samples"),
              menuSubItem(text = "Parentage data", tabName = "data_parentage"))
   })

@@ -11,6 +11,17 @@ library(tidyr)
 library(plyr)
 library(rgeos)
 library(kinship2)
+library(RSQLite)
+library(pool)
+
+# Make connection to a database and tear it down on stop.
+db <- dbPool(drv = RSQLite::SQLite(), 
+             dbname = "./db/wolfexplorer.sqlite"
+)
+
+onStop(function() {
+  poolClose(db)
+})
 
 source("./R/functions.R")
 
@@ -27,7 +38,7 @@ ui <- dashboardPage(header, sidebar, body, skin = "black")
 
 #### SERVER ####
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   #### FILE INPUT ####  
   source("./R/file_input.R", local = TRUE)
@@ -35,7 +46,7 @@ server <- function(input, output) {
   #### CREATE VARIABLES ####
   source("./R/create_variables.R", local = TRUE)
   
-  #### VIEW UPLOADED DATA ####
+  #### VIEW DATA ####
   source("./R/view_data.R", local = TRUE)
   
   #### DYNAMIC UI ####
@@ -46,7 +57,6 @@ server <- function(input, output) {
   
   #### PLOT PEDIGREE ####
   source("./R/plot_pedigree.R", local = TRUE)
-  
-}
+}  
 
 shinyApp(ui, server)

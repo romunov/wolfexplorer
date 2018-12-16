@@ -25,25 +25,9 @@ body <- dashboardBody(
             )
     ),
     tabItem(tabName = "data_samples",
-            fluidRow(
-              box(solidHeader = TRUE, collapsible = TRUE, title = "Upload samples data",
-                  fileInput(inputId = "data_samples", 
-                            label = "Upload dataset",
-                            buttonLabel = "Select data",
-                            accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))),
-              h4("Upload parentage data for full functionality")),
-            br(),
-            br(),
             uiOutput("view_samples")
     ),
     tabItem(tabName = "data_parentage",
-            box(solidHeader = TRUE, collapsible = TRUE, title = "Upload parentage / colony data",
-                fileInput(inputId = "data_parentage", 
-                          label = "Upload dataset",
-                          buttonLabel = "Select data",
-                          accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))),
-            br(),
-            br(),
             uiOutput("view_parentage")
     ),
     tabItem(tabName = "overview",

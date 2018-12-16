@@ -8,6 +8,38 @@ output:
 
 Explorer designed to visualize complex multi-year multi-specimen data. Attached data is a subset of data from wolf monitoring of wolves in Slovenia in season 2016/2017 ([summary in English](http://www.natura2000.si/uploads/tx_library/MonitoringVolk__summary.pdf)).
 
+### Setting up the SQLite database
+_Do not panic, it's not as hard as it initially seems._ In version 0.9, the data had to be uploaded manually for each session. From this point on, an sqlite database has been established to keep the data persistent between sessions. In order to fully take advantage of the database, you will need to import your data into a database called `./db/wolfexplorer.sqlite`. If you wish to change the name of the database, you will have to account for this in `app.R` to point to the correct database file.
+
+The database holds two tables, `samples` and `parentage`. This are their structures:
+
+```
+db <- dbConnect(RSQLite::SQLite(), "./db/wolfexplorer.sqlite")
+# table: samples
+str(dbReadTable(db, "samples"))
+
+'data.frame':	214 obs. of  8 variables:
+ $ x               : num  415290 439351 445349 446926 447214 ...
+ $ y               : num  48493 44444 44421 49001 48825 ...
+ $ date            : chr  "2010-04-23" "2014-12-22" "2014-12-15" "2015-07-10" ...
+ $ sample_type     : chr  "Saliva" "Saliva" "Saliva" "Saliva" ...
+ $ animal          : chr  "657" "657" "658" "658" ...
+ $ sex             : chr  "M" "M" "M" "M" ...
+ $ sample_name     : chr  "AH.03MT" "EX.1JKT" "EX.1JJ1" "EX.1JL4" ...
+ $ reference_sample: chr  "AH.03MT" "AH.03MT" "AL.05PH" "AL.05PH" ...
+ 
+# table: parentage
+str(dbReadTable(db, "parentage"))
+
+'data.frame':	40 obs. of  4 variables:
+ $ offspring: chr  "M2122" "M0PLL" "M110M" "M1H52" ...
+ $ mother   : chr  "AU.0AEF" "#1" "#2" "M1HXJ" ...
+ $ father   : chr  "AH.03MT" "M1J4C" "*3" "AL.0611" ...
+ $ cluster  : int  2 2 3 2 2 2 2 3 2 2 ...
+```
+
+If you do not care for manual setting up the database and have the files already handy, there's a handy script called `db_setup.R` in the base folder of this application. The script imports the data which is shipped with this package. It will help you import two data.frames into a database. You will have to name your files to match those expected by the script or modify the script to reflect your file names. Note that the script makes no attempts to clear any databases. If it is already populated, you will either have to purge the database or use `append` or `overwrite` parameters.
+
 ### Limitations
 This viewer will require you shape your data to a somewhat specific, yet general enough, format. It can display only certain coordinate systems. Luckily WGS 84 (EPSG: 4326) is one of them. Data in the application is not persistent, but this limitation is something we're thinking of relaxing in the future.
 
@@ -34,7 +66,7 @@ shiny::runGitHub(repo = "wolfexplorer", username = "romunov")
 `*` you can install packages listed in the [`app.R`](https://github.com/romunov/wolfexplorer/blob/master/app.R#L1) using something along the lines of
 
 ```
-install.packages(c("shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "kinship2"))
+install.packages(c("shinydashboard", "leaflet", "RColorBrewer", "DT", "sp", "rgdal", "data.table", "ggplot2", "colourpicker", "tidyr", "plyr", "rgeos", "kinship2", "RSQLite"))
 ```
 
 ## The manual way

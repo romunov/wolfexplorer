@@ -12,8 +12,9 @@ Imports:
     tidyr (>= 0.8.0),
     plyr (>= 1.8.4),
     rgeos (>= 0.3-26),
-    kinship2 (>= 1.6.4)
-version: 0.9
+    kinship2 (>= 1.6.4),
+    RSQLite (>= 2.1.0)
+version: 1.0
 Authors: Roman Luštrik (@romunov) & Žan Kuralt (@zkuralt)
 License: GNU GENERAL PUBLIC LICENSE
 DisplayMode: Normal
