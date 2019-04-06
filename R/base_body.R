@@ -6,7 +6,6 @@ body <- dashboardBody(
                 tags$head(
                   # Include our custom CSS
                   includeCSS("./css/styles.css")
-                  # includeScript("gomap.js")
                 ),
                 leafletOutput("map"),
                 absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,

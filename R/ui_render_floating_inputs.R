@@ -65,7 +65,7 @@ observe({
 })
 
 # If familial/cluster data is available, create a menu which 
-# offers to filters out only animals from selected cluster
+# offers to filters out only animals from selected cluster.
 observe({
   xy <- inputFileParentage()
   if ((nrow(xy) > 0) & (length(unique(xy$cluster)) > 1)) {
@@ -79,9 +79,7 @@ observe({
 })
 
 observe({
-  if(!is.null(input$cluster) && input$cluster != "all")
-  # if(length(input$cluster) > 0)
-    {
+  if(!is.null(input$cluster) && input$cluster != "all") {
     output$pedig.plot <- renderUI({
       checkboxInput(inputId = "plot.pedigree", label = "Plot pedigree", value = FALSE)
     })

@@ -9,11 +9,12 @@ GKtoWGS <- function(df) {
   names(df)[grepl("^y$|^Y$", names(df))] <- "y"
   
   # Detect if coordinates are in GK or WGS
-  if (mean(nchar(as.integer(abs(df$x)))) > 3) { # If coords are in GK, convert them to WGS, otherwise let them be
+  # If coords are in GK, convert them to WGS, otherwise let them be.
+  if (mean(nchar(as.integer(abs(df$x)))) > 3) {
     coordinates(df) <- ~ x + y
     
-    proj4string(df) <- CRS("+init=epsg:3912") # EPSG:3912
-    WGS <- CRS("+init=epsg:4326") # WGS84
+    proj4string(df) <- CRS("+init=epsg:3912")  # EPSG:3912
+    WGS <- CRS("+init=epsg:4326")  # WGS84
     converted <- spTransform(df, WGS)
     
     df$lng <- converted$x
@@ -89,10 +90,11 @@ customSentence <- function(numItems, type) {
   paste("Currently displaying")
 }
 
+
 #' Function to call in place of dropdownMenu
 dropdownMenuCustom <- function (..., type = c("messages", "notifications", "tasks"),
-                                badgeStatus = "primary", icon = NULL, .list = NULL, customSentence = customSentence)
-{
+                                badgeStatus = "primary", icon = NULL, .list = NULL, 
+                                customSentence = customSentence) {
   type <- match.arg(type)
   if (!is.null(badgeStatus)) shinydashboard:::validateStatus(badgeStatus)
   items <- c(list(...), .list)
@@ -142,7 +144,7 @@ calChull <- function(x) {
     coordinates(x) <- ~ lng + lat
     point <- SpatialPoints(x)
     
-    # convert to UTM to have buffer in sensible units
+    # Cnvert to UTM to have buffer in sensible units.
     initcrs <- CRS("+init=epsg:4326")
     proj4string(point) <- initcrs
     point <- spTransform(point, CRSobj = CRS("+init=epsg:3912"))
@@ -159,10 +161,10 @@ calChull <- function(x) {
     lines <- Lines(slinelist = list(line), ID = "1")
     s.line <- SpatialLines(LinesList = list(lines))
     
-    # convert to UTM to have buffer in sensible units
+    # Convert to UTM to have buffer in sensible units.
     proj4string(s.line) <- initcrs
     s.line <- spTransform(s.line, CRSobj = CRS("+init=epsg:3912"))
-    mcp <- gBuffer(s.line, width = 1000) # buffer of 1 km
+    mcp <- gBuffer(s.line, width = 1000)  # buffer of 1 km
     mcp <- spTransform(mcp, CRSobj = initcrs)
     
     return(mcp)
@@ -183,12 +185,7 @@ calChull <- function(x) {
 #' @param samples A data.frame with samples data
 #' @param data A data.frame with parentage data
 #' @param cluster Selected cluster
-
-
 fillSexAndStatus <- function(samples, data, cluster) {
-  
-  # browser()
-  
   samples$sex <- as.character(samples$sex)
   
   # kinship2 needs sex data in that form.
@@ -198,36 +195,16 @@ fillSexAndStatus <- function(samples, data, cluster) {
 
   fam <- data[data$cluster == cluster, ] # subset data by cluster
 
-  # for (i in 1:nrow(fam)) {
-  #   if (nchar(fam$mother[i]) == 0) {
-  #     virtual.mother <- paste("UM", i, sep = "")
-  #     fam$mother[i] <- virtual.mother
-  #     add.virtual.mother <- c(virtual.mother, "", "", cluster)
-  #     fam <- rbind(fam, add.virtual.mother)
-  #   }
-  #   if (nchar(fam$father[i]) == 0) {
-  #     virtual.father <- paste("UF", i, sep = "")
-  #     fam$father[i] <- virtual.father
-  #     add.virtual.father <- c(virtual.father, "", "", cluster)
-  #     fam <- rbind(fam, add.virtual.father)
-  #   }
-  # }
-
-
   members <- na.omit(unique(unlist(fam[ , c("offspring", "father", "mother")]))) # find all cluster members
   members <- members[nchar(members) > 0]
 
   no.parents <- members[!(members %in% fam$offspring)] # find members without known parents
   
-  # # print(paste("Found", length(no.parents), "animals without known parents.", sep = " "))
-
-  # fill empty parents to those members
+  # Fill empty parents to those members.
   for (i in no.parents) {
     add.parents <- c(i, "", "", cluster)
     fam <- rbind(fam, add.parents)
   }
-
-  # print(paste("Family has", nrow(fam), "members.", sep = " "))
 
   # v podatkih o vzorcih poišči podatke o spolu članov družine
   sex_data <- unique(samples[samples$reference_sample %in% members, c("reference_sample", "sex")])
@@ -235,7 +212,7 @@ fillSexAndStatus <- function(samples, data, cluster) {
   dead_animals <- samples[samples$sample_type %in% c("Decomposing Tissue", "Tissue") &
                             samples$reference_sample %in% members, c("reference_sample")]
 
-  # pridruži podatke o spolu
+  # Add data on sex.
   data <- merge(x = fam, y = sex_data, by.x = "offspring", by.y = "reference_sample", all = TRUE)
 
   data$sex[grep(pattern = "[*]", x = data$offspring, ignore.case = TRUE)] <- "male"
@@ -245,7 +222,5 @@ fillSexAndStatus <- function(samples, data, cluster) {
 
   data$status <- 0
   data$status[data$offspring %in% dead_animals] <- 1
-  # print(paste(length(dead_animals), "known dead animal(s) in the family.", sep = " "))
-
   data
 }

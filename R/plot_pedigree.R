@@ -1,16 +1,13 @@
 observe({
-  
   if (is.null(input$plot.pedigree)) return(NULL)
   if (input$plot.pedigree == TRUE && input$cluster != "all") {
-    
-    
     samples <- inputFileSamples()
     relations <- inputFileParentage()
     cluster <- input$cluster
     
     family <- fillSexAndStatus(samples, relations, cluster)
     
-    # izdelaj pedigree
+    # Make pedigree.
     pdgr <- pedigree(id = family$offspring, 
                      dadid = family$father, 
                      momid = family$mother, 
@@ -25,9 +22,8 @@ observe({
            col = "#31a354")
     })
     
-    # this answer helped with collapsible panel
+    # This answer helped with collapsible panel
     # https://stackoverflow.com/questions/35175167/collapse-absolutepanel-in-shiny/35175847
-    
     output$pedigree.panel <- renderUI({
       absolutePanel(id = "pedigree", class = "panel panel-default", fixed = TRUE,
                     draggable = FALSE, top = "auto", left = 250, right = "auto", bottom = 10, 
@@ -41,9 +37,8 @@ observe({
   }
   if (input$plot.pedigree == FALSE) {
     output$pedigree.panel <- renderUI({ NULL })
-    }
+  }
   if (input$cluster == "all") {
     output$pedigree.panel <- renderUI({ NULL })
-    }
+  }
 })
-

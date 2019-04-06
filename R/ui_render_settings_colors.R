@@ -33,16 +33,15 @@ observe({
   }
 })
 
-# if a new color is picked, update the data.frame
+# If a new color is picked, update the data.frame.
 observe({
   if (nrow(allData()) > 0) {
     for (i in colors.df$mapping$ui_name) {
-      # print(sprintf("working with %s", colors.df[colors.df$ui_name == i, "sample_type_levels"]))
       new.color <- input[[i]]
       if (!is.null(new.color)) {
         current.color <- as.character(colors.df$mapping[colors.df$mapping$ui_name == i, "sample_type_colors"])
         if (new.color != current.color) {
-          # if colors do not match, update old color with new color
+          # If colors do not match, update old color with new color.
           colors.df$mapping[colors.df$mapping$ui_name == i, "sample_type_colors"] <- new.color
         }
       }
