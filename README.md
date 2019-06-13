@@ -50,7 +50,7 @@ If you are using RStudio, open the project file, open `app.R` and press `Run App
 
 If you are not using RStudio, just set working directory the project folder and run `runApp()`.
 
-If all goes well, you should see the application, displayed either in RStudio viewer pane or in your default broweser (preferably).
+If all goes well, you should see the application, displayed either in RStudio viewer pane or in your default browser (preferably).
 
 ![](./img/welcome.png)
 
@@ -108,7 +108,7 @@ Head back to the `Explore data` menu. Notice that another input field has appear
 It is also possible to plot pedigree tree. Once you've selected parentage data and selected a cluster ("family"), check `Plot pedigree` checkmark.
 
 ![](./img/parentage.png)
-You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circlular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created.
+You can draw MCP (maximum convex polygon) for selected animals by checking the `Show MCP` checkmark. If there's only one sample, a circular polygon is drawn around that point. For two points, a buffer of 1 km is drawn around the straight line connecting the two points. *These two cases are not true MCPs but is a compromise between accuracy of MCP and visual display of limited number of points.* For three points or more, a MCP as one would expect is created.
 
 ![](./img/mcp.png)
 
