@@ -6,8 +6,7 @@ observe({
     if (is.null(mcpIn)) { return(NULL) }
     
     if (mcpIn) {
-      # get data for all selected animals, adult and otherwise
-      # prepare parents data
+      # Get data for all selected animals, adult and otherwise prepare parents data.
       parent <- wolfPicks()
       xy <- addParentageData(x = parent, parents = inputFileParentage())
       
@@ -43,7 +42,7 @@ observe({
         mcp.centroid <- sapply(mcp, FUN = gCentroid)
       }
       
-      # renumber IDs, modified from https://gis.stackexchange.com/a/234030
+      # Renumber IDs, modified from https://gis.stackexchange.com/a/234030
       nms <- names(ani.list)
       mcp <- lapply(1:length(mcp), function(i, mcp, nms) {
         spChFIDs(mcp[[i]], nms[i])
@@ -58,7 +57,7 @@ observe({
                          levels = c("parent", "offspring"),
                          ordered = TRUE)
       
-      # find unique class of polygons - which corresponds to list element in xy
+      # Find unique class of polygons - which corresponds to list element in xy.
       xy.class <- sapply(ani.list, FUN = function(x) {unique(x$class)})
       xy.class <- sapply(xy.class, "[", 1)
       
@@ -82,10 +81,10 @@ observe({
       
       for (i in cent.parents) {
         # If parent has any offspring (selected), connect centroids as described above.
-        num.offspring <- xy[xy$mother %in% i | xy$father %in% i, ] # find all offspring for parent i
+        num.offspring <- xy[xy$mother %in% i | xy$father %in% i, ]  # find all offspring for parent i
         
         if (nrow(num.offspring) > 0) {
-          cent.i.offspring <- unique(num.offspring$reference_sample) # isolate offspring animals
+          cent.i.offspring <- unique(num.offspring$reference_sample)  # isolate offspring animals
           
           for (j in cent.i.offspring) {
             if (any(names(mcp.centroid) %in% j)) {
@@ -101,8 +100,6 @@ observe({
           }
         }
       }
-      
-      
     } else {
       leafletProxy(mapId = "map") %>% 
         clearGroup(group = "MCP")

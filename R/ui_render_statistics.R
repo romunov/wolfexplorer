@@ -44,7 +44,6 @@ observe({
   offs <- data.frame(count(par.tidy, "value")) # Get number of offspring per parent
   clust <- data.frame(count(par, "cluster"))
   
-  
   if (nrow(allData()) > 0) {
     output$sps <- renderDataTable({
      sam_typ

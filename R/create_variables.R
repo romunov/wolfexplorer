@@ -42,7 +42,7 @@ mortality <- reactive({
   }
 })
 
-# Filter out offspring from data
+# Filter out offspring from data.
 fOffs <- reactive({
   xy <- fData()
   x <- unique(wolfPicks()$reference_sample)
@@ -78,7 +78,4 @@ getCluster <- reactive({
         xy$reference_sample %in% kls$father, ]
     return(out[, "reference_sample"])
   }
-  
-  
-  
 })
